@@ -1,0 +1,27 @@
+Creative Commons Attribution 4.0 International
+
+Except for the three trilogy books expressly excluded in LICENSE.md,
+original non-code content authored by Alex Alaniz is licensed under the
+Creative Commons Attribution 4.0 International License.
+
+You may share and adapt covered material for any purpose, including
+commercial purposes, provided that you:
+
+1. Give appropriate credit to Alex Alaniz.
+2. Provide a reference to the CC BY 4.0 license.
+3. Indicate whether changes were made.
+4. Do not imply endorsement by Alex Alaniz.
+
+Official license:
+
+https://creativecommons.org/licenses/by/4.0/
+
+This license does not apply to:
+
+- War & Peace - Earth PRINT - 2023.docx
+- War & Peace - Mars.docx
+- War & Peace - Universe.docx
+- material owned by third parties
+
+Those three trilogy books remain All Rights Reserved.
+Third-party material remains subject to its existing rights and licenses.
