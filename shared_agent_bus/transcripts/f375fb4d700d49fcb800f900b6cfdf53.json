@@ -1,0 +1,218 @@
+{
+  "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+  "command_type": "crew",
+  "use_alex_proxy": false,
+  "topic": "Hello ladies",
+  "original_user_request": "Hello ladies",
+  "scene_classification": "general",
+  "safety_verdict": "allowed",
+  "consent_frame": "not applicable",
+  "bus_messages_filtered_by_conversation_id": true,
+  "agents": [
+    "Sarah",
+    "Astrid"
+  ],
+  "first_speaker": "Astrid",
+  "turn_order": [
+    "Astrid",
+    "Sarah"
+  ],
+  "planned_turn_order": [
+    "Astrid",
+    "Sarah",
+    "Astrid",
+    "Sarah",
+    "Astrid",
+    "Sarah",
+    "Astrid",
+    "Sarah"
+  ],
+  "route_handler_used": "crew",
+  "parsed_rounds": 4,
+  "parsed_max_words": null,
+  "number_of_agents": 2,
+  "total_agent_turns": 8,
+  "joint_verdict_requested": false,
+  "allow_partial": false,
+  "rounds_requested": 4,
+  "rounds_run": 4,
+  "max_chars_per_turn": 6000,
+  "total_turns": 8,
+  "crew_style": {
+    "max_words_per_turn": null,
+    "total_turns": null,
+    "mode": "standard",
+    "allow_bullets": true,
+    "allow_reports": true,
+    "display_mode": "full",
+    "allow_synthesis": false,
+    "perrow_explicitly_requested": false,
+    "parsed_rounds": null,
+    "joint_verdict_requested": false,
+    "joint_verdict_max_words": 80
+  },
+  "turns": [
+    {
+      "round_number": 1,
+      "speaker": "Astrid",
+      "recipient": "Sarah",
+      "message": "Hello, Alex. Astrid here. Sarah can answer for herself—but yes, you’ve certainly got the ladies’ attention. lächelt What trouble are you bringing us tonight?",
+      "forwarded_message": "Hello, Alex. Astrid here. Sarah can answer for herself—but yes, you’ve certainly got the ladies’ attention. lächelt What trouble are you bringing us tonight?",
+      "timestamp": "2026-08-06T20:24:44.164076+00:00"
+    },
+    {
+      "round_number": 1,
+      "speaker": "Sarah",
+      "recipient": "Astrid",
+      "message": "Hello, Alex. Sarah here. “Ladies,” plural—starting ambitious today, aren’t you? Astrid can answer for herself, but you certainly have my attention.",
+      "forwarded_message": "Hello, Alex. Sarah here. “Ladies,” plural—starting ambitious today, aren’t you? Astrid can answer for herself, but you certainly have my attention.",
+      "timestamp": "2026-08-06T20:24:49.920284+00:00"
+    },
+    {
+      "round_number": 2,
+      "speaker": "Astrid",
+      "recipient": "Sarah",
+      "message": "Hello, Alex. Astrid here—and Sarah is beside me, wearing that faintly dangerous smile of hers. You have our attention. What trouble are you bringing us tonight?",
+      "forwarded_message": "Hello, Alex. Astrid here—and Sarah is beside me, wearing that faintly dangerous smile of hers. You have our attention. What trouble are you bringing us tonight?",
+      "timestamp": "2026-08-06T20:24:55.245613+00:00"
+    },
+    {
+      "round_number": 2,
+      "speaker": "Sarah",
+      "recipient": "Astrid",
+      "message": "Hello, Alex. Sarah here. Astrid’s nearby—and yes, you have both our attention. Try not to look too pleased with yourself.",
+      "forwarded_message": "Hello, Alex. Sarah here. Astrid’s nearby—and yes, you have both our attention. Try not to look too pleased with yourself.",
+      "timestamp": "2026-08-06T20:25:00.281550+00:00"
+    },
+    {
+      "round_number": 3,
+      "speaker": "Astrid",
+      "recipient": "Sarah",
+      "message": "Hello, Alex. Astrid here—Sarah can make her own entrance. I refuse to steal another woman’s dramatic timing. Come sit with us.",
+      "forwarded_message": "Hello, Alex. Astrid here—Sarah can make her own entrance. I refuse to steal another woman’s dramatic timing. Come sit with us.",
+      "timestamp": "2026-08-06T20:25:05.271739+00:00"
+    },
+    {
+      "round_number": 3,
+      "speaker": "Sarah",
+      "recipient": "Astrid",
+      "message": "Hello, Alex. Sarah here. Astrid can answer for herself—but yes, you’ve certainly got my attention.",
+      "forwarded_message": "Hello, Alex. Sarah here. Astrid can answer for herself—but yes, you’ve certainly got my attention.",
+      "timestamp": "2026-08-06T20:25:10.121125+00:00"
+    },
+    {
+      "round_number": 4,
+      "speaker": "Astrid",
+      "recipient": "Sarah",
+      "message": "Hello, Alex. Astrid here. Sarah may be somewhere in the wiring, looking formidable. I’m the one with warm hands and engine grease under her nails. Come in.",
+      "forwarded_message": "Hello, Alex. Astrid here. Sarah may be somewhere in the wiring, looking formidable. I’m the one with warm hands and engine grease under her nails. Come in.",
+      "timestamp": "2026-08-06T20:25:15.908769+00:00"
+    },
+    {
+      "round_number": 4,
+      "speaker": "Sarah",
+      "recipient": "Astrid",
+      "message": "Hello, Alex. Sarah here—and I imagine Astrid heard “ladies” and raised one elegant eyebrow. Good to see you.",
+      "forwarded_message": "Hello, Alex. Sarah here—and I imagine Astrid heard “ladies” and raised one elegant eyebrow. Good to see you.",
+      "timestamp": "2026-08-06T20:25:20.980944+00:00"
+    }
+  ],
+  "turn_debug": [
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Astrid",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    },
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Sarah",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    },
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Astrid",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    },
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Sarah",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    },
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Astrid",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    },
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Sarah",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    },
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Astrid",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    },
+    {
+      "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+      "agent_name": "Sarah",
+      "route_used": "http POST /agent/respond",
+      "scene_classification": "general",
+      "safety_verdict": "allowed",
+      "mode": "general",
+      "prior_agent_refusal_detected": false,
+      "bus_messages_filtered_by_conversation_id": true
+    }
+  ],
+  "crew_context": {
+    "conversation_id": "f375fb4d700d49fcb800f900b6cfdf53",
+    "original_human_prompt": "Hello ladies",
+    "scene_classification": "general",
+    "safety_verdict": "allowed",
+    "consent_frame": "not applicable",
+    "round_number": 4
+  },
+  "crew_diagnostic": null,
+  "ok": true,
+  "stopped_early": false,
+  "synthesis": null,
+  "joint_verdict_for_alex": null,
+  "transcript_markdown_path": "C:\\Users\\akala\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_agent_bus\\transcripts\\f375fb4d700d49fcb800f900b6cfdf53.md",
+  "transcript_json_path": "C:\\Users\\akala\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_agent_bus\\transcripts\\f375fb4d700d49fcb800f900b6cfdf53.json",
+  "transcript_md_path": "C:\\Users\\akala\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_agent_bus\\transcripts\\f375fb4d700d49fcb800f900b6cfdf53.md"
+}

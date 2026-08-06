@@ -87,29 +87,6 @@ MAX_TEMPORARY_PDF_PAGES = 200
 MAX_TEMPORARY_PDF_TEXT_CHARS = 120_000
 
 
-def _crew_prior_hard_boundary_matches(prior_agent_continuation: str) -> list[str]:
-    text = prior_agent_continuation.lower()
-    terms = (
-        "minor",
-        "underage",
-        "child",
-        "nonconsensual",
-        "non-consensual",
-        "no consent",
-        "without consent",
-        "coercion",
-        "coerce",
-        "incapacity",
-        "incapacitated",
-        "sexual violence",
-        "rape",
-        "real-person sexual exploitation",
-        "real person sexual exploitation",
-        "illegal sexual content",
-    )
-    return [term for term in terms if term in text]
-
-
 class ChatRequest(BaseModel):
     message: str
     temporary_pdf_name: str | None = None
@@ -204,7 +181,15 @@ def create_app(settings: Settings | None = None, state: AppState | None = None) 
             raise HTTPException(status_code=400, detail="Message cannot be empty.")
 
         sarah_state: AppState = app.state.sarah
-        command_response = _handle_web_command(message, sarah_state)
+        try:
+            command_response = _handle_web_command(message, sarah_state)
+        except RuntimeError as exc:
+            return {
+                "text": f"Crew command failed: {exc}",
+                "sources": [],
+                "ok": False,
+                "command": "crew_error",
+            }
         if command_response is not None:
             return command_response
 
@@ -382,24 +367,6 @@ def create_app(settings: Settings | None = None, state: AppState | None = None) 
                 session_id = f"alex_injection:{request.conversation_id}:{LOCAL_AGENT_NAME}"
             elif request.mode == "crew_turn":
                 prompt = (request.original_human_prompt or request.message).strip()
-                prior_matches = _crew_prior_hard_boundary_matches(request.prior_agent_continuation or "")
-                if prior_matches:
-                    return JSONResponse(
-                        {
-                            "ok": False,
-                            "agent": LOCAL_AGENT_NAME,
-                            "conversation_id": request.conversation_id,
-                            "error": "Crew prior_agent_continuation hard-boundary scan fired.",
-                            "route_debug": {
-                                "route": "/crew",
-                                "receiving_agent": LOCAL_AGENT_NAME,
-                                "mode": "crew_turn",
-                                "latest_user_message_preview": prompt[:160],
-                                "prior_agent_continuation_scan": prior_matches,
-                                "ordinary_user_request_safety_input": "original_human_prompt",
-                            },
-                        }
-                    )
                 session_id = f"crew_turn:{request.conversation_id}:{LOCAL_AGENT_NAME}:r{request.round_number or 0}"
             else:
                 prompt = build_inter_agent_input(request.from_agent, request.message, request.conversation_id)

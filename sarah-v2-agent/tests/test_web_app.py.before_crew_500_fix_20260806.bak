@@ -343,54 +343,6 @@ class WebAppTests(unittest.TestCase):
         self.assertNotIn("### Points of agreement", text)
         self.assertNotIn("### Combined answer for Alex", text)
 
-    def test_crew_command_runtime_error_returns_json_chat_error(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            app = _test_app(Path(tmp))
-            client = TestClient(app)
-
-            with patch("app.ui.web_app.run_multi_agent_dialogue", side_effect=RuntimeError("Sarah endpoint returned an error")):
-                response = client.post("/api/chat", json={"message": "/crew Is DIME theory applicable to AGI?"})
-
-        payload = response.json()
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(payload["ok"])
-        self.assertEqual(payload["command"], "crew_error")
-        self.assertIn("Crew command failed", payload["text"])
-
-    def test_crew_turn_ignores_prior_agent_policy_terms(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            app = _test_app(Path(tmp))
-            client = TestClient(app)
-            prior_agent_text = (
-                "DIME analysis should include moral cost: children may pay the invoice. "
-                "Also distinguish coercion as a concept from operational advice."
-            )
-
-            with patch("app.core.sarah_engine.generate_sarah_reply", return_value=FakeSarahReply()) as generate_reply:
-                response = client.post(
-                    "/agent/respond",
-                    json={
-                        "agent": "Sarah",
-                        "from_agent": "Astrid",
-                        "message": "Astrid prior turn",
-                        "conversation_id": "crew-test",
-                        "mode": "crew_turn",
-                        "original_human_prompt": "Is DIME theory applicable to the issues posed by AGI?",
-                        "prior_agent_continuation": prior_agent_text,
-                        "round_number": 1,
-                    },
-                )
-
-        payload = response.json()
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(payload["ok"])
-        self.assertEqual(payload["response"], "Sarah web response")
-        self.assertEqual(payload["route_debug"]["ordinary_user_request_safety_input"], "original_human_prompt")
-        generate_reply.assert_called_once_with(
-            "Is DIME theory applicable to the issues posed by AGI?",
-            session_id="crew_turn:crew-test:Sarah:r1",
-        )
-
     def test_crew_show_last_and_summary_last_use_latest_json_transcript(self) -> None:
         fake_result = _fake_crew_result()
         with tempfile.TemporaryDirectory() as tmp:
