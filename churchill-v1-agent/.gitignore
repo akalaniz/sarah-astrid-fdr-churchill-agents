@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+data/vector_store/*
+!data/vector_store/.gitkeep
+data/conversations/*
+!data/conversations/.gitkeep
+data/web_cache/*
+!data/web_cache/.gitkeep
+data/memory/*
+!data/memory/fdr_memory.jsonl

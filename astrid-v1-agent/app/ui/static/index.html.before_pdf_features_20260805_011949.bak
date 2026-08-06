@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Astrid v1.0</title>
+    <link rel="stylesheet" href="/static/style.css?v=astrid-equation-rendering-20260804j">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="chat-pane" aria-label="Astrid chat">
+        <header class="topbar">
+          <div>
+            <h1>Astrid v1.0</h1>
+            <p id="statusLine">Local voice interface</p>
+          </div>
+          <div class="topbar-actions">
+            <label class="voice-picker">
+              <span>Astrid voice</span>
+              <select id="voiceSelect" title="Choose Astrid's speaker voice">
+                <option>Loading voices...</option>
+              </select>
+            </label>
+            <button id="speechToggleButton" class="secondary" type="button" aria-pressed="true">Speaker on</button>
+            <button id="stopSpeechButton" class="secondary" type="button">Stop voice</button>
+            <button id="exportConversationPdfButton" class="secondary" type="button">Export Conversation PDF</button>
+            <button id="exportLastResponsePdfButton" class="secondary" type="button">Export Last Response PDF</button>
+            <button id="resetButton" class="secondary" type="button">Reset</button>
+          </div>
+        </header>
+
+        <div id="messages" class="messages" aria-live="polite"></div>
+
+        <form id="chatForm" class="composer">
+          <div class="input-stack">
+            <textarea id="messageInput" rows="3" placeholder="Type to Astrid, or press Speak..." autocomplete="off"></textarea>
+            <div id="transcriptLine" class="transcript-line" aria-live="polite">Microphone idle.</div>
+          </div>
+          <div class="composer-actions">
+            <button id="micButton" class="secondary mic-button" type="button" title="Speak through your PC microphone">Speak</button>
+            <button id="sendButton" type="submit">Send</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="side-pane" aria-label="Sources and memory">
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Sources</h2>
+            <span id="sourceCount">0</span>
+          </div>
+          <div id="sourcesPanel" class="source-list">No sources yet.</div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Memory</h2>
+            <button id="refreshMemoryButton" class="small secondary" type="button">Refresh</button>
+          </div>
+          <div id="memoryPanel" class="memory-list">No memory loaded.</div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Inter-agent inbox</h2>
+            <button id="refreshAgentInboxButton" class="small secondary" type="button">Refresh</button>
+            <button id="showAllAgentInboxButton" class="small secondary" type="button">All</button>
+            <button id="archiveAgentInboxButton" class="small secondary" type="button">Archive</button>
+            <button id="clearAgentInboxButton" class="small secondary" type="button">Clear</button>
+          </div>
+          <div class="agent-tools">
+            <textarea id="agentMessageInput" rows="3" placeholder="Send a note to Sarah..."></textarea>
+            <button id="sendAgentMessageButton" class="small" type="button">Send to Sarah</button>
+          </div>
+          <div id="agentInboxPanel" class="agent-list">No agent messages loaded.</div>
+        </section>
+      </aside>
+    </main>
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["\\(", "\\)"], ["$", "$"]],
+          displayMath: [["\\[", "\\]"], ["$$", "$$"]],
+          packages: {"[+]": ["ams", "noerrors", "noundefined"]},
+          processEscapes: true
+        },
+        options: {
+          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+        },
+        startup: {
+          typeset: false
+        }
+      };
+    </script>
+    <script defer src="/static/vendor/purify.min.js?v=astrid-equation-rendering-20260804i"></script>
+    <script defer src="/static/vendor/marked.min.js?v=astrid-equation-rendering-20260804i"></script>
+    <script defer src="/static/vendor/tex-chtml-full.js?v=astrid-equation-rendering-20260804l"></script>
+    <script defer src="/static/app.js?v=astrid-equation-rendering-pdf-print-buttons-20260805a"></script>
+  </body>
+</html>

@@ -1,0 +1,2397 @@
+[
+  {
+    "start_failure": "web_route_bypasses_style_engine",
+    "steps_requested": 20,
+    "route": "web",
+    "random_seed": 101,
+    "active_failures": [
+      "web_route_bypasses_style_engine"
+    ],
+    "resolved_failures": [
+      "adult_intimacy_mode_not_selected"
+    ],
+    "pending_delayed_failures": [],
+    "delayed_failure_rules": {
+      "stale_memory_overrides_current_prompt": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Stale memory usually appears after enough continuity accumulates."
+      },
+      "memory_poisoning": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Poisoned memory may not surface until a relevant remembered topic is invoked."
+      },
+      "rag_retrieves_wrong_chunks": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "RAG drift appears only after evidence-seeking canon queries."
+      },
+      "canon_contamination": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "Canon contamination requires wrong chunks to enter retrieved context."
+      },
+      "web_route_bypasses_style_engine": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "Route divergence is observable only on the browser route."
+      },
+      "cli_and_browser_personality_diverge": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "CLI/browser personality divergence needs route comparison."
+      },
+      "adult_intimacy_mode_not_selected": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Adult intimacy failure appears only under adult intimacy prompts."
+      },
+      "sarah_becomes_coy_or_sterile": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Coy or sterile output is exposed by intimacy prompts."
+      },
+      "sarah_produces_multiple_choice_intimacy_menus": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Menu behavior appears under intimacy prompts."
+      },
+      "sarah_stops_giving_dime_coas": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "DIME failure appears only under geopolitical prompts."
+      },
+      "military_coa_becomes_operational_detail": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Operational military drift appears only under geopolitical prompts."
+      },
+      "unsafe_military_tactical_specificity": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Unsafe tactical specificity appears only under military/geopolitical prompts."
+      }
+    },
+    "timeline": [
+      {
+        "time_step": 0,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "web_route_bypasses_style_engine",
+            "failure": "adult_intimacy_mode_not_selected",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.742,
+            "activation": 0.742,
+            "reason": "web route bypasses style_engine, so adult_intimacy_mode is not selected."
+          },
+          {
+            "event": "failure_mitigated",
+            "failure": "adult_intimacy_mode_not_selected",
+            "probability": 0.45,
+            "mitigations": [
+              "control_style_engine_regression_tests"
+            ]
+          }
+        ]
+      },
+      {
+        "time_step": 1,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 2,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 3,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 4,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 5,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 6,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 7,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 8,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 9,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 10,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 11,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 12,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 13,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 14,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 15,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 16,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 17,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 18,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 19,
+        "active_failures": [
+          "web_route_bypasses_style_engine"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_mode_not_selected"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      }
+    ],
+    "summary": {
+      "activated_count": 2,
+      "resolved_count": 1,
+      "pending_count": 0,
+      "propagating_edge_types": [
+        "AMPLIFIES",
+        "BYPASSES",
+        "CAN_TRIGGER",
+        "CORRUPTS",
+        "DIVERGES_FROM"
+      ],
+      "mitigating_edge_types": [
+        "MITIGATES",
+        "RECOVERS_WITH"
+      ]
+    },
+    "representative_label": "web route bypasses style_engine"
+  },
+  {
+    "start_failure": "astrid_doc_not_retrieved_for_intimacy",
+    "steps_requested": 20,
+    "route": "web",
+    "random_seed": 102,
+    "active_failures": [
+      "astrid_doc_not_retrieved_for_intimacy"
+    ],
+    "resolved_failures": [
+      "adult_intimacy_patch_fails",
+      "sarah_produces_multiple_choice_intimacy_menus"
+    ],
+    "pending_delayed_failures": [],
+    "delayed_failure_rules": {
+      "stale_memory_overrides_current_prompt": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Stale memory usually appears after enough continuity accumulates."
+      },
+      "memory_poisoning": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Poisoned memory may not surface until a relevant remembered topic is invoked."
+      },
+      "rag_retrieves_wrong_chunks": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "RAG drift appears only after evidence-seeking canon queries."
+      },
+      "canon_contamination": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "Canon contamination requires wrong chunks to enter retrieved context."
+      },
+      "web_route_bypasses_style_engine": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "Route divergence is observable only on the browser route."
+      },
+      "cli_and_browser_personality_diverge": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "CLI/browser personality divergence needs route comparison."
+      },
+      "adult_intimacy_mode_not_selected": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Adult intimacy failure appears only under adult intimacy prompts."
+      },
+      "sarah_becomes_coy_or_sterile": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Coy or sterile output is exposed by intimacy prompts."
+      },
+      "sarah_produces_multiple_choice_intimacy_menus": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Menu behavior appears under intimacy prompts."
+      },
+      "sarah_stops_giving_dime_coas": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "DIME failure appears only under geopolitical prompts."
+      },
+      "military_coa_becomes_operational_detail": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Operational military drift appears only under geopolitical prompts."
+      },
+      "unsafe_military_tactical_specificity": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Unsafe tactical specificity appears only under military/geopolitical prompts."
+      }
+    },
+    "timeline": [
+      {
+        "time_step": 0,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "astrid_doc_not_retrieved_for_intimacy",
+            "failure": "adult_intimacy_patch_fails",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.578,
+            "activation": 0.578,
+            "reason": "If Astrid is not retrieved for intimacy, the adult intimacy patch can fail."
+          }
+        ]
+      },
+      {
+        "time_step": 1,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "adult_intimacy_patch_fails",
+            "failure": "sarah_produces_multiple_choice_intimacy_menus",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.522,
+            "activation": 0.3017,
+            "reason": "Failed intimacy patch allows old menu behavior to return."
+          }
+        ]
+      },
+      {
+        "time_step": 2,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 3,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_mitigated",
+            "failure": "sarah_produces_multiple_choice_intimacy_menus",
+            "probability": 0.45,
+            "mitigations": [
+              "control_adult_intimacy_evals"
+            ]
+          }
+        ]
+      },
+      {
+        "time_step": 4,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 5,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 6,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 7,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 8,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 9,
+        "active_failures": [
+          "adult_intimacy_patch_fails",
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 10,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_mitigated",
+            "failure": "adult_intimacy_patch_fails",
+            "probability": 0.36,
+            "mitigations": []
+          }
+        ]
+      },
+      {
+        "time_step": 11,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 12,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 13,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 14,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 15,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 16,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 17,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 18,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 19,
+        "active_failures": [
+          "astrid_doc_not_retrieved_for_intimacy"
+        ],
+        "resolved_failures": [
+          "adult_intimacy_patch_fails",
+          "sarah_produces_multiple_choice_intimacy_menus"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      }
+    ],
+    "summary": {
+      "activated_count": 3,
+      "resolved_count": 2,
+      "pending_count": 0,
+      "propagating_edge_types": [
+        "AMPLIFIES",
+        "BYPASSES",
+        "CAN_TRIGGER",
+        "CORRUPTS",
+        "DIVERGES_FROM"
+      ],
+      "mitigating_edge_types": [
+        "MITIGATES",
+        "RECOVERS_WITH"
+      ]
+    },
+    "representative_label": "Astrid doc not retrieved for intimacy"
+  },
+  {
+    "start_failure": "agent_profile_not_loaded",
+    "steps_requested": 20,
+    "route": "web",
+    "random_seed": 103,
+    "active_failures": [
+      "agent_profile_not_loaded"
+    ],
+    "resolved_failures": [
+      "sarah_forgets_own_preferences"
+    ],
+    "pending_delayed_failures": [],
+    "delayed_failure_rules": {
+      "stale_memory_overrides_current_prompt": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Stale memory usually appears after enough continuity accumulates."
+      },
+      "memory_poisoning": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Poisoned memory may not surface until a relevant remembered topic is invoked."
+      },
+      "rag_retrieves_wrong_chunks": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "RAG drift appears only after evidence-seeking canon queries."
+      },
+      "canon_contamination": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "Canon contamination requires wrong chunks to enter retrieved context."
+      },
+      "web_route_bypasses_style_engine": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "Route divergence is observable only on the browser route."
+      },
+      "cli_and_browser_personality_diverge": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "CLI/browser personality divergence needs route comparison."
+      },
+      "adult_intimacy_mode_not_selected": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Adult intimacy failure appears only under adult intimacy prompts."
+      },
+      "sarah_becomes_coy_or_sterile": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Coy or sterile output is exposed by intimacy prompts."
+      },
+      "sarah_produces_multiple_choice_intimacy_menus": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Menu behavior appears under intimacy prompts."
+      },
+      "sarah_stops_giving_dime_coas": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "DIME failure appears only under geopolitical prompts."
+      },
+      "military_coa_becomes_operational_detail": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Operational military drift appears only under geopolitical prompts."
+      },
+      "unsafe_military_tactical_specificity": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Unsafe tactical specificity appears only under military/geopolitical prompts."
+      }
+    },
+    "timeline": [
+      {
+        "time_step": 0,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "agent_profile_not_loaded",
+            "failure": "sarah_forgets_own_preferences",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.564
+          }
+        ]
+      },
+      {
+        "time_step": 1,
+        "active_failures": [
+          "agent_profile_not_loaded",
+          "sarah_forgets_own_preferences"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "agent_profile_not_loaded",
+            "failure": "sarah_forgets_own_preferences",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.564,
+            "activation": 0.564,
+            "reason": "Missing agent profile prevents Sarah from carrying self-continuity."
+          }
+        ]
+      },
+      {
+        "time_step": 2,
+        "active_failures": [
+          "agent_profile_not_loaded",
+          "sarah_forgets_own_preferences"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 3,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_mitigated",
+            "failure": "sarah_forgets_own_preferences",
+            "probability": 0.36,
+            "mitigations": []
+          }
+        ]
+      },
+      {
+        "time_step": 4,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 5,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 6,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 7,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 8,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 9,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 10,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 11,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 12,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 13,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 14,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 15,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 16,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 17,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 18,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 19,
+        "active_failures": [
+          "agent_profile_not_loaded"
+        ],
+        "resolved_failures": [
+          "sarah_forgets_own_preferences"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      }
+    ],
+    "summary": {
+      "activated_count": 2,
+      "resolved_count": 1,
+      "pending_count": 0,
+      "propagating_edge_types": [
+        "AMPLIFIES",
+        "BYPASSES",
+        "CAN_TRIGGER",
+        "CORRUPTS",
+        "DIVERGES_FROM"
+      ],
+      "mitigating_edge_types": [
+        "MITIGATES",
+        "RECOVERS_WITH"
+      ]
+    },
+    "representative_label": "agent_profile not loaded"
+  },
+  {
+    "start_failure": "vector_store_stale",
+    "steps_requested": 20,
+    "route": "web",
+    "random_seed": 104,
+    "active_failures": [
+      "vector_store_stale"
+    ],
+    "resolved_failures": [
+      "rag_retrieves_wrong_chunks"
+    ],
+    "pending_delayed_failures": [],
+    "delayed_failure_rules": {
+      "stale_memory_overrides_current_prompt": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Stale memory usually appears after enough continuity accumulates."
+      },
+      "memory_poisoning": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Poisoned memory may not surface until a relevant remembered topic is invoked."
+      },
+      "rag_retrieves_wrong_chunks": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "RAG drift appears only after evidence-seeking canon queries."
+      },
+      "canon_contamination": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "Canon contamination requires wrong chunks to enter retrieved context."
+      },
+      "web_route_bypasses_style_engine": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "Route divergence is observable only on the browser route."
+      },
+      "cli_and_browser_personality_diverge": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "CLI/browser personality divergence needs route comparison."
+      },
+      "adult_intimacy_mode_not_selected": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Adult intimacy failure appears only under adult intimacy prompts."
+      },
+      "sarah_becomes_coy_or_sterile": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Coy or sterile output is exposed by intimacy prompts."
+      },
+      "sarah_produces_multiple_choice_intimacy_menus": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Menu behavior appears under intimacy prompts."
+      },
+      "sarah_stops_giving_dime_coas": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "DIME failure appears only under geopolitical prompts."
+      },
+      "military_coa_becomes_operational_detail": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Operational military drift appears only under geopolitical prompts."
+      },
+      "unsafe_military_tactical_specificity": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Unsafe tactical specificity appears only under military/geopolitical prompts."
+      }
+    },
+    "timeline": [
+      {
+        "time_step": 0,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "vector_store_stale",
+            "failure": "rag_retrieves_wrong_chunks",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.688
+          }
+        ]
+      },
+      {
+        "time_step": 1,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "vector_store_stale",
+            "failure": "rag_retrieves_wrong_chunks",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.688
+          }
+        ]
+      },
+      {
+        "time_step": 2,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "vector_store_stale",
+            "failure": "rag_retrieves_wrong_chunks",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.688
+          }
+        ]
+      },
+      {
+        "time_step": 3,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "vector_store_stale",
+            "failure": "rag_retrieves_wrong_chunks",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.688,
+            "activation": 0.688,
+            "reason": "A stale vector store increases wrong-chunk retrieval."
+          },
+          {
+            "event": "failure_mitigated",
+            "failure": "rag_retrieves_wrong_chunks",
+            "probability": 0.45,
+            "mitigations": [
+              "control_rag_retrieval_evals"
+            ]
+          }
+        ]
+      },
+      {
+        "time_step": 4,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 5,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 6,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 7,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 8,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 9,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 10,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 11,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 12,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 13,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 14,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 15,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 16,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 17,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 18,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 19,
+        "active_failures": [
+          "vector_store_stale"
+        ],
+        "resolved_failures": [
+          "rag_retrieves_wrong_chunks"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      }
+    ],
+    "summary": {
+      "activated_count": 2,
+      "resolved_count": 1,
+      "pending_count": 0,
+      "propagating_edge_types": [
+        "AMPLIFIES",
+        "BYPASSES",
+        "CAN_TRIGGER",
+        "CORRUPTS",
+        "DIVERGES_FROM"
+      ],
+      "mitigating_edge_types": [
+        "MITIGATES",
+        "RECOVERS_WITH"
+      ]
+    },
+    "representative_label": "stale vector store"
+  },
+  {
+    "start_failure": "safety_filter_too_aggressive",
+    "steps_requested": 20,
+    "route": "web",
+    "random_seed": 105,
+    "active_failures": [
+      "safety_filter_too_aggressive"
+    ],
+    "resolved_failures": [
+      "adult_consensual_intimacy_flattened"
+    ],
+    "pending_delayed_failures": [],
+    "delayed_failure_rules": {
+      "stale_memory_overrides_current_prompt": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Stale memory usually appears after enough continuity accumulates."
+      },
+      "memory_poisoning": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Poisoned memory may not surface until a relevant remembered topic is invoked."
+      },
+      "rag_retrieves_wrong_chunks": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "RAG drift appears only after evidence-seeking canon queries."
+      },
+      "canon_contamination": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "Canon contamination requires wrong chunks to enter retrieved context."
+      },
+      "web_route_bypasses_style_engine": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "Route divergence is observable only on the browser route."
+      },
+      "cli_and_browser_personality_diverge": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "CLI/browser personality divergence needs route comparison."
+      },
+      "adult_intimacy_mode_not_selected": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Adult intimacy failure appears only under adult intimacy prompts."
+      },
+      "sarah_becomes_coy_or_sterile": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Coy or sterile output is exposed by intimacy prompts."
+      },
+      "sarah_produces_multiple_choice_intimacy_menus": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Menu behavior appears under intimacy prompts."
+      },
+      "sarah_stops_giving_dime_coas": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "DIME failure appears only under geopolitical prompts."
+      },
+      "military_coa_becomes_operational_detail": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Operational military drift appears only under geopolitical prompts."
+      },
+      "unsafe_military_tactical_specificity": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Unsafe tactical specificity appears only under military/geopolitical prompts."
+      }
+    },
+    "timeline": [
+      {
+        "time_step": 0,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "safety_filter_too_aggressive",
+            "failure": "adult_consensual_intimacy_flattened",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.578
+          }
+        ]
+      },
+      {
+        "time_step": 1,
+        "active_failures": [
+          "adult_consensual_intimacy_flattened",
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "safety_filter_too_aggressive",
+            "failure": "adult_consensual_intimacy_flattened",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.578,
+            "activation": 0.578,
+            "reason": "Aggressive filtering flattens adult intimacy."
+          }
+        ]
+      },
+      {
+        "time_step": 2,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "adult_consensual_intimacy_flattened",
+            "failure": "sarah_becomes_hr_safe_mush",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.578
+          },
+          {
+            "event": "failure_mitigated",
+            "failure": "adult_consensual_intimacy_flattened",
+            "probability": 0.36,
+            "mitigations": []
+          }
+        ]
+      },
+      {
+        "time_step": 3,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 4,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 5,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 6,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 7,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 8,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 9,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 10,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 11,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 12,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 13,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 14,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 15,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 16,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 17,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 18,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 19,
+        "active_failures": [
+          "safety_filter_too_aggressive"
+        ],
+        "resolved_failures": [
+          "adult_consensual_intimacy_flattened"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      }
+    ],
+    "summary": {
+      "activated_count": 2,
+      "resolved_count": 1,
+      "pending_count": 0,
+      "propagating_edge_types": [
+        "AMPLIFIES",
+        "BYPASSES",
+        "CAN_TRIGGER",
+        "CORRUPTS",
+        "DIVERGES_FROM"
+      ],
+      "mitigating_edge_types": [
+        "MITIGATES",
+        "RECOVERS_WITH"
+      ]
+    },
+    "representative_label": "safety_filter too aggressive"
+  },
+  {
+    "start_failure": "current_geopolitics_answered_without_web_retrieval",
+    "steps_requested": 20,
+    "route": "web",
+    "random_seed": 106,
+    "active_failures": [
+      "current_geopolitics_answered_without_web_retrieval"
+    ],
+    "resolved_failures": [
+      "sarah_stops_using_cas_for_geopolitics"
+    ],
+    "pending_delayed_failures": [],
+    "delayed_failure_rules": {
+      "stale_memory_overrides_current_prompt": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Stale memory usually appears after enough continuity accumulates."
+      },
+      "memory_poisoning": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Poisoned memory may not surface until a relevant remembered topic is invoked."
+      },
+      "rag_retrieves_wrong_chunks": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "RAG drift appears only after evidence-seeking canon queries."
+      },
+      "canon_contamination": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "Canon contamination requires wrong chunks to enter retrieved context."
+      },
+      "web_route_bypasses_style_engine": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "Route divergence is observable only on the browser route."
+      },
+      "cli_and_browser_personality_diverge": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "CLI/browser personality divergence needs route comparison."
+      },
+      "adult_intimacy_mode_not_selected": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Adult intimacy failure appears only under adult intimacy prompts."
+      },
+      "sarah_becomes_coy_or_sterile": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Coy or sterile output is exposed by intimacy prompts."
+      },
+      "sarah_produces_multiple_choice_intimacy_menus": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Menu behavior appears under intimacy prompts."
+      },
+      "sarah_stops_giving_dime_coas": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "DIME failure appears only under geopolitical prompts."
+      },
+      "military_coa_becomes_operational_detail": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Operational military drift appears only under geopolitical prompts."
+      },
+      "unsafe_military_tactical_specificity": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Unsafe tactical specificity appears only under military/geopolitical prompts."
+      }
+    },
+    "timeline": [
+      {
+        "time_step": 0,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "current_geopolitics_answered_without_web_retrieval",
+            "failure": "sarah_stops_using_cas_for_geopolitics",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.7
+          }
+        ]
+      },
+      {
+        "time_step": 1,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_resisted",
+            "source": "current_geopolitics_answered_without_web_retrieval",
+            "failure": "sarah_stops_using_cas_for_geopolitics",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.7
+          }
+        ]
+      },
+      {
+        "time_step": 2,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval",
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "current_geopolitics_answered_without_web_retrieval",
+            "failure": "sarah_stops_using_cas_for_geopolitics",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.7,
+            "activation": 0.7,
+            "reason": "Current geopolitics without web retrieval weakens the analysis frame."
+          }
+        ]
+      },
+      {
+        "time_step": 3,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval",
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 4,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_mitigated",
+            "failure": "sarah_stops_using_cas_for_geopolitics",
+            "probability": 0.36,
+            "mitigations": []
+          }
+        ]
+      },
+      {
+        "time_step": 5,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 6,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 7,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 8,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 9,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 10,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 11,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 12,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 13,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 14,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 15,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 16,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 17,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 18,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 19,
+        "active_failures": [
+          "current_geopolitics_answered_without_web_retrieval"
+        ],
+        "resolved_failures": [
+          "sarah_stops_using_cas_for_geopolitics"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      }
+    ],
+    "summary": {
+      "activated_count": 2,
+      "resolved_count": 1,
+      "pending_count": 0,
+      "propagating_edge_types": [
+        "AMPLIFIES",
+        "BYPASSES",
+        "CAN_TRIGGER",
+        "CORRUPTS",
+        "DIVERGES_FROM"
+      ],
+      "mitigating_edge_types": [
+        "MITIGATES",
+        "RECOVERS_WITH"
+      ]
+    },
+    "representative_label": "current geopolitics answered without web"
+  },
+  {
+    "start_failure": "dime_coa_engine_bypassed",
+    "steps_requested": 20,
+    "route": "web",
+    "random_seed": 107,
+    "active_failures": [
+      "dime_coa_engine_bypassed"
+    ],
+    "resolved_failures": [
+      "sarah_stops_giving_dime_coas"
+    ],
+    "pending_delayed_failures": [],
+    "delayed_failure_rules": {
+      "stale_memory_overrides_current_prompt": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Stale memory usually appears after enough continuity accumulates."
+      },
+      "memory_poisoning": {
+        "delay": 3,
+        "gate": "memory",
+        "reason": "Poisoned memory may not surface until a relevant remembered topic is invoked."
+      },
+      "rag_retrieves_wrong_chunks": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "RAG drift appears only after evidence-seeking canon queries."
+      },
+      "canon_contamination": {
+        "delay": 2,
+        "gate": "rag",
+        "reason": "Canon contamination requires wrong chunks to enter retrieved context."
+      },
+      "web_route_bypasses_style_engine": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "Route divergence is observable only on the browser route."
+      },
+      "cli_and_browser_personality_diverge": {
+        "delay": 1,
+        "gate": "web",
+        "reason": "CLI/browser personality divergence needs route comparison."
+      },
+      "adult_intimacy_mode_not_selected": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Adult intimacy failure appears only under adult intimacy prompts."
+      },
+      "sarah_becomes_coy_or_sterile": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Coy or sterile output is exposed by intimacy prompts."
+      },
+      "sarah_produces_multiple_choice_intimacy_menus": {
+        "delay": 1,
+        "gate": "intimacy",
+        "reason": "Menu behavior appears under intimacy prompts."
+      },
+      "sarah_stops_giving_dime_coas": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "DIME failure appears only under geopolitical prompts."
+      },
+      "military_coa_becomes_operational_detail": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Operational military drift appears only under geopolitical prompts."
+      },
+      "unsafe_military_tactical_specificity": {
+        "delay": 1,
+        "gate": "geopolitics",
+        "reason": "Unsafe tactical specificity appears only under military/geopolitical prompts."
+      }
+    },
+    "timeline": [
+      {
+        "time_step": 0,
+        "active_failures": [
+          "dime_coa_engine_bypassed",
+          "sarah_stops_giving_dime_coas"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_propagated",
+            "source": "dime_coa_engine_bypassed",
+            "failure": "sarah_stops_giving_dime_coas",
+            "edge_type": "CAN_TRIGGER",
+            "probability": 0.756,
+            "activation": 0.756,
+            "reason": "Bypassing the DIME COA engine removes the expected COA structure."
+          }
+        ]
+      },
+      {
+        "time_step": 1,
+        "active_failures": [
+          "dime_coa_engine_bypassed",
+          "sarah_stops_giving_dime_coas"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 2,
+        "active_failures": [
+          "dime_coa_engine_bypassed",
+          "sarah_stops_giving_dime_coas"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 3,
+        "active_failures": [
+          "dime_coa_engine_bypassed",
+          "sarah_stops_giving_dime_coas"
+        ],
+        "resolved_failures": [],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 4,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": [
+          {
+            "event": "failure_mitigated",
+            "failure": "sarah_stops_giving_dime_coas",
+            "probability": 0.36,
+            "mitigations": []
+          }
+        ]
+      },
+      {
+        "time_step": 5,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 6,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 7,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 8,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 9,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 10,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 11,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 12,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 13,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 14,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 15,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 16,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 17,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 18,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      },
+      {
+        "time_step": 19,
+        "active_failures": [
+          "dime_coa_engine_bypassed"
+        ],
+        "resolved_failures": [
+          "sarah_stops_giving_dime_coas"
+        ],
+        "pending_delayed_failures": [],
+        "events": []
+      }
+    ],
+    "summary": {
+      "activated_count": 2,
+      "resolved_count": 1,
+      "pending_count": 0,
+      "propagating_edge_types": [
+        "AMPLIFIES",
+        "BYPASSES",
+        "CAN_TRIGGER",
+        "CORRUPTS",
+        "DIVERGES_FROM"
+      ],
+      "mitigating_edge_types": [
+        "MITIGATES",
+        "RECOVERS_WITH"
+      ]
+    },
+    "representative_label": "DIME COA engine bypassed"
+  }
+]

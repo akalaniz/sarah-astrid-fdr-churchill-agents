@@ -1,0 +1,6 @@
+FDR:
+  name: Franklin Delano Roosevelt
+  status: paired
+  base_url: http://127.0.0.1:8010
+  respond_endpoint: http://127.0.0.1:8010/agent/respond
+  description: Paired historical agent for FDR-Churchill debates.

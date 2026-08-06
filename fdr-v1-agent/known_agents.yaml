@@ -1,0 +1,6 @@
+Churchill:
+  name: Winston Churchill
+  status: planned
+  base_url: http://127.0.0.1:8011
+  respond_endpoint: http://127.0.0.1:8011/agent/respond
+  description: Future paired historical agent for FDR-Churchill debates.

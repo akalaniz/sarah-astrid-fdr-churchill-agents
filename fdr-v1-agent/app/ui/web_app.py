@@ -1,0 +1,1273 @@
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import re
+from typing import Any
+
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+
+from app.core.agent_bus import (
+    AgentBusMalformedError,
+    LOCAL_AGENT_NAME,
+    archive_inbox,
+    clean_bus_error,
+    clear_inbox,
+    debug_agent_bus,
+    format_debug_agent_bus,
+    format_inbox,
+    format_inbox_view,
+    format_message,
+    format_thread,
+    get_inbox_messages,
+    get_message,
+    get_unread_messages,
+    mark_message_read,
+    reply_to_message,
+    send_agent_message,
+)
+from app.core.config import Settings, load_settings
+from app.core.memory import MemoryStore, format_memories
+from app.core import sarah_engine
+from app.core.rag_context import format_sources
+from app.core.safety import format_debug_safety
+from app.core import transcript_maintenance as transcripts
+from app.core import web_cache_maintenance as web_cache
+from app.core.worldline import (
+    debug_rag,
+    debug_worldline,
+    format_debug_rag,
+    format_debug_worldline,
+    format_sources_list,
+)
+from app.orchestration.agent_orchestrator import (
+    TRANSCRIPT_DIR,
+    build_inter_agent_input,
+    close_active_crew,
+    continue_crew_with_alex,
+    debug_orchestrator,
+    format_debug_debate_alex,
+    format_debug_orchestrator,
+    get_latest_crew_info,
+    is_agent_endpoint_reachable,
+    load_crew_payload,
+    parse_debate_alex_command,
+    parse_crew_command,
+    repair_crew_transcript,
+    run_debate_alex,
+    run_multi_agent_dialogue,
+)
+
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+
+
+class ChatRequest(BaseModel):
+    message: str
+
+
+class RememberRequest(BaseModel):
+    text: str
+
+
+class AgentSendRequest(BaseModel):
+    to_agent: str = "Churchill"
+    subject: str = "Message from FDR"
+    body: str
+    conversation_id: str | None = None
+    metadata: dict[str, Any] | None = None
+
+
+class AgentReadRequest(BaseModel):
+    message_id: str
+
+
+class AgentReplyRequest(BaseModel):
+    message_id: str
+    body: str
+    subject: str | None = None
+    metadata: dict[str, Any] | None = None
+
+
+class AgentRespondRequest(BaseModel):
+    from_agent: str
+    message: str
+    conversation_id: str
+    mode: str = "inter_agent"
+
+
+class MultiAgentRunRequest(BaseModel):
+    topic: str
+    agents: str = "FDR,Churchill"
+    rounds: int = 4
+    max_chars_per_turn: int = 6000
+    no_synthesis: bool = False
+
+
+class AppState:
+    def __init__(self, settings: Settings) -> None:
+        self.settings = settings
+        self.memory_store = MemoryStore(settings.memory_file)
+        self.session_id = "web"
+        self.last_crew_style_debug: dict[str, Any] | None = None
+        self.crew_verbose = False
+        self.crew_echo_alex = False
+
+
+def create_app(settings: Settings | None = None, state: AppState | None = None) -> FastAPI:
+    settings = settings or load_settings()
+    sarah_engine.configure_sarah_engine(settings=settings)
+    app = FastAPI(title="FDR v1.0 Local Web UI")
+    app.state.sarah = state or AppState(settings)
+
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+    @app.get("/")
+    def index() -> FileResponse:
+        return FileResponse(STATIC_DIR / "index.html", headers={"Cache-Control": "no-store"})
+
+    @app.get("/api/status")
+    def status() -> dict[str, Any]:
+        sarah_state: AppState = app.state.sarah
+        return {
+            "agent_name": "FDR v1.0",
+            "worldline": "fdr_churchill_historical",
+            "model": sarah_state.settings.sarah_model,
+            "host_scope": "localhost-only",
+            "conversation_turns": sarah_engine.get_sarah_session_turn_count(sarah_state.session_id),
+        }
+
+    @app.post("/api/chat")
+    def chat(request: ChatRequest) -> dict[str, Any]:
+        message = request.message.strip()
+        if not message:
+            raise HTTPException(status_code=400, detail="Message cannot be empty.")
+
+        sarah_state: AppState = app.state.sarah
+        command_response = _handle_web_command(message, sarah_state)
+        if command_response is not None:
+            return command_response
+
+        try:
+            reply = sarah_engine.generate_sarah_reply(message, session_id=sarah_state.session_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+        return {
+            "text": reply.text,
+            "sources": reply.sources,
+        }
+
+    @app.post("/api/reset")
+    def reset() -> dict[str, Any]:
+        sarah_state: AppState = app.state.sarah
+        sarah_engine.reset_sarah_session(sarah_state.session_id)
+        return {"status": "reset"}
+
+    @app.get("/api/memory")
+    def list_memory() -> dict[str, Any]:
+        sarah_state: AppState = app.state.sarah
+        return {
+            "memories": [
+                {
+                    "memory_id": memory.memory_id,
+                    "memory_type": memory.memory_type,
+                    "text": memory.text,
+                    "updated_at": memory.updated_at,
+                    "tags": memory.tags,
+                }
+                for memory in sarah_state.memory_store.list_memories()
+            ]
+        }
+
+    @app.post("/api/memory")
+    def remember(request: RememberRequest) -> dict[str, Any]:
+        text = request.text.strip()
+        if not text:
+            raise HTTPException(status_code=400, detail="Memory text cannot be empty.")
+        sarah_state: AppState = app.state.sarah
+        memory = sarah_state.memory_store.remember(text, source="web_ui_explicit_user_command")
+        return {
+            "memory_id": memory.memory_id,
+            "memory_type": memory.memory_type,
+            "text": memory.text,
+        }
+
+    @app.get("/agent/inbox")
+    def agent_inbox(all: bool = False) -> JSONResponse:
+        try:
+            messages = get_inbox_messages(LOCAL_AGENT_NAME, include_all=True) if all else get_unread_messages(LOCAL_AGENT_NAME)
+            return JSONResponse({"messages": messages})
+        except AgentBusMalformedError as exc:
+            return JSONResponse(status_code=500, content=clean_bus_error(exc))
+
+    @app.post("/agent/archive_inbox")
+    def agent_archive_inbox() -> JSONResponse:
+        try:
+            return JSONResponse({"archived": archive_inbox(LOCAL_AGENT_NAME)})
+        except AgentBusMalformedError as exc:
+            return JSONResponse(status_code=500, content=clean_bus_error(exc))
+
+    @app.post("/agent/clear_inbox_confirm")
+    def agent_clear_inbox_confirm() -> JSONResponse:
+        try:
+            return JSONResponse({"cleared": clear_inbox(LOCAL_AGENT_NAME)})
+        except AgentBusMalformedError as exc:
+            return JSONResponse(status_code=500, content=clean_bus_error(exc))
+
+    @app.post("/agent/send")
+    def agent_send(request: AgentSendRequest) -> dict[str, Any]:
+        try:
+            message = send_agent_message(
+                from_agent=LOCAL_AGENT_NAME,
+                to_agent=request.to_agent,
+                subject=request.subject,
+                body=request.body,
+                conversation_id=request.conversation_id,
+                metadata={**(request.metadata or {}), "route": "web"},
+            )
+        except AgentBusMalformedError as exc:
+            return JSONResponse(status_code=500, content=clean_bus_error(exc))
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        return {"message": message}
+
+    @app.post("/agent/read")
+    def agent_read(request: AgentReadRequest) -> dict[str, Any]:
+        try:
+            ok = mark_message_read(request.message_id, LOCAL_AGENT_NAME)
+            message = get_message(request.message_id)
+        except AgentBusMalformedError as exc:
+            return JSONResponse(status_code=500, content=clean_bus_error(exc))
+        if not ok or message is None:
+            raise HTTPException(status_code=404, detail="Message not found for FDR.")
+        return {"message": message}
+
+    @app.post("/agent/reply")
+    def agent_reply(request: AgentReplyRequest) -> dict[str, Any]:
+        try:
+            message = reply_to_message(
+                message_id=request.message_id,
+                from_agent=LOCAL_AGENT_NAME,
+                body=request.body,
+                subject=request.subject,
+                metadata={**(request.metadata or {}), "route": "web"},
+            )
+        except AgentBusMalformedError as exc:
+            return JSONResponse(status_code=500, content=clean_bus_error(exc))
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+        except PermissionError as exc:
+            raise HTTPException(status_code=403, detail=str(exc)) from exc
+        return {"message": message}
+
+    @app.post("/agent/respond")
+    def agent_respond(request: AgentRespondRequest) -> JSONResponse:
+        try:
+            if request.mode != "inter_agent":
+                raise ValueError("Unsupported response mode.")
+            sarah_state: AppState = app.state.sarah
+            prompt = build_inter_agent_input(request.from_agent, request.message, request.conversation_id)
+            reply = sarah_engine.generate_sarah_reply(prompt, session_id=f"inter_agent:{request.conversation_id}")
+            return JSONResponse(
+                {
+                    "ok": True,
+                    "agent": LOCAL_AGENT_NAME,
+                    "response": reply.text,
+                    "conversation_id": request.conversation_id,
+                    "sources": reply.sources,
+                    "memory_file": str(sarah_state.settings.memory_file),
+                }
+            )
+        except Exception as exc:
+            return JSONResponse(
+                status_code=500,
+                content={"ok": False, "agent": LOCAL_AGENT_NAME, "conversation_id": request.conversation_id, "error": str(exc)},
+            )
+
+    @app.get("/multi_agent")
+    def multi_agent_page() -> HTMLResponse:
+        return HTMLResponse(_multi_agent_page_html())
+
+    @app.post("/multi_agent/run")
+    def multi_agent_run(request: MultiAgentRunRequest) -> JSONResponse:
+        try:
+            if "churchill" in request.agents.lower() and not is_agent_endpoint_reachable("Churchill"):
+                return JSONResponse(
+                    status_code=503,
+                    content={
+                        "ok": False,
+                        "error": _churchill_not_running_message(),
+                        "text": _churchill_not_running_message(),
+                    },
+                )
+            result = run_multi_agent_dialogue(
+                topic=request.topic,
+                agents=[agent.strip() for agent in request.agents.split(",")],
+                rounds=request.rounds,
+                max_chars_per_turn=request.max_chars_per_turn,
+                no_synthesis=request.no_synthesis,
+            )
+            result["markdown_url"] = f"/multi_agent/transcript/{result['conversation_id']}"
+            return JSONResponse(result)
+        except Exception as exc:
+            return JSONResponse(status_code=500, content={"ok": False, "error": str(exc)})
+
+    @app.get("/multi_agent/transcript/{conversation_id}")
+    def multi_agent_transcript(conversation_id: str) -> FileResponse:
+        path = TRANSCRIPT_DIR / f"{conversation_id}.md"
+        if not path.exists():
+            raise HTTPException(status_code=404, detail="Transcript not found.")
+        return FileResponse(path, media_type="text/markdown")
+
+    return app
+
+
+def _handle_web_command(message: str, sarah_state: AppState) -> dict[str, Any] | None:
+    command = message.lower()
+    if command == "/memory":
+        return {
+            "text": format_memories(sarah_state.memory_store.list_memories()),
+            "sources": [],
+            "command": "memory",
+        }
+
+    if command.startswith("/memory "):
+        keyword = message[len("/memory ") :].strip()
+        return {
+            "text": sarah_engine.format_sarah_memories(keyword),
+            "sources": [],
+            "command": "memory_search",
+        }
+
+    if command.startswith("/remember "):
+        memory_text = message[len("/remember ") :].strip()
+        if not memory_text:
+            raise HTTPException(status_code=400, detail="Memory text cannot be empty.")
+        record = sarah_state.memory_store.remember(memory_text, source="web_ui_slash_command")
+        return {
+            "text": f"I'll remember that. ({record.memory_type})",
+            "sources": [],
+            "command": "remember",
+            "memory": {
+                "memory_id": record.memory_id,
+                "memory_type": record.memory_type,
+                "text": record.text,
+            },
+        }
+
+    if command.startswith("/recall "):
+        keyword = message[len("/recall ") :].strip()
+        if not keyword:
+            raise HTTPException(status_code=400, detail="Recall keyword cannot be empty.")
+        return {
+            "text": sarah_engine.recall_sarah_memories(keyword, session_id=sarah_state.session_id),
+            "sources": [],
+            "command": "recall",
+        }
+
+    if command == "/recall_all":
+        return {
+            "text": sarah_engine.recall_all_sarah_memories(session_id=sarah_state.session_id),
+            "sources": [],
+            "command": "recall_all",
+        }
+
+    if command == "/clear_recall":
+        return {
+            "text": sarah_engine.clear_sarah_recall(session_id=sarah_state.session_id),
+            "sources": [],
+            "command": "clear_recall",
+        }
+
+    if command in {"/use_memory on", "/use_memory off"}:
+        enabled = command.endswith(" on")
+        return {
+            "text": sarah_engine.set_sarah_use_memory(enabled, session_id=sarah_state.session_id),
+            "sources": [],
+            "command": "use_memory",
+        }
+
+    if command == "/debug_memory_live":
+        return {
+            "text": sarah_engine.format_debug_sarah_memory_live(sarah_state.session_id),
+            "sources": [],
+            "command": "debug_memory_live",
+            "debug": sarah_engine.debug_sarah_memory_live(sarah_state.session_id),
+        }
+
+    if command == "/debug_worldline":
+        return {
+            "text": format_debug_worldline(sarah_state.settings),
+            "sources": [],
+            "command": "debug_worldline",
+            "debug": debug_worldline(sarah_state.settings),
+        }
+
+    if command == "/sources_list":
+        return {
+            "text": format_sources_list(sarah_state.settings),
+            "sources": [],
+            "command": "sources_list",
+        }
+
+    if command == "/debug_rag":
+        return {
+            "text": format_debug_rag(sarah_state.settings),
+            "sources": [],
+            "command": "debug_rag",
+            "debug": debug_rag(sarah_state.settings),
+        }
+
+    if command.startswith("/forget "):
+        keyword = message[len("/forget ") :].strip()
+        forgotten = sarah_state.memory_store.forget(keyword)
+        return {
+            "text": f"Forgot {len(forgotten)} matching {'memory' if len(forgotten) == 1 else 'memories'}.",
+            "sources": [],
+            "command": "forget",
+        }
+
+    if command == "/reset":
+        sarah_engine.reset_sarah_session(sarah_state.session_id)
+        return {"text": "Active conversation history cleared.", "sources": [], "command": "reset"}
+
+    if command == "/sources":
+        last_reply = sarah_engine.get_last_sarah_reply(sarah_state.session_id)
+        sources = last_reply.retrieval_results if last_reply else []
+        return {"text": format_sources(sources), "sources": [], "command": "sources"}
+
+    transcript_command = _handle_transcript_command(message)
+    if transcript_command is not None:
+        return transcript_command
+
+    web_cache_command = _handle_web_cache_command(message)
+    if web_cache_command is not None:
+        return web_cache_command
+
+    if command == "/debug_safety":
+        last_reply = sarah_engine.get_last_sarah_reply(sarah_state.session_id)
+        debug = getattr(last_reply, "safety_debug", None) if last_reply else None
+        return {"text": format_debug_safety(debug), "sources": [], "command": "debug_safety"}
+
+    if command == "/debug_agent_bus":
+        debug_text = format_debug_agent_bus(LOCAL_AGENT_NAME)
+        try:
+            debug_payload = debug_agent_bus(LOCAL_AGENT_NAME)
+        except AgentBusMalformedError as exc:
+            debug_payload = clean_bus_error(exc)
+        return {
+            "text": debug_text,
+            "sources": [],
+            "command": "debug_agent_bus",
+            "debug": debug_payload,
+        }
+
+    if command == "/inbox all":
+        return {"text": format_inbox_view(LOCAL_AGENT_NAME, include_all=True), "sources": [], "command": "inbox_all"}
+
+    if command == "/archive_inbox":
+        try:
+            archived = archive_inbox(LOCAL_AGENT_NAME)
+        except AgentBusMalformedError as exc:
+            return {"text": format_debug_agent_bus(LOCAL_AGENT_NAME), "sources": [], "command": "archive_inbox", "error": str(exc)}
+        return {"text": f"Archived {archived} messages addressed to {LOCAL_AGENT_NAME}.", "sources": [], "command": "archive_inbox"}
+
+    if command == "/clear_inbox_confirm":
+        try:
+            cleared = clear_inbox(LOCAL_AGENT_NAME)
+        except AgentBusMalformedError as exc:
+            return {"text": format_debug_agent_bus(LOCAL_AGENT_NAME), "sources": [], "command": "clear_inbox_confirm", "error": str(exc)}
+        return {"text": f"Cleared {cleared} messages addressed to {LOCAL_AGENT_NAME}.", "sources": [], "command": "clear_inbox_confirm"}
+
+    if command == "/debug_orchestrator":
+        return {
+            "text": format_debug_orchestrator(),
+            "sources": [],
+            "command": "debug_orchestrator",
+            "debug": debug_orchestrator(),
+        }
+
+    if command == "/debug_debate_alex":
+        return {
+            "text": format_debug_debate_alex(),
+            "sources": [],
+            "command": "debug_debate_alex",
+        }
+
+    if command == "/debug_crew_style":
+        debug = sarah_state.last_crew_style_debug or _crew_style_debug(parse_crew_command("debug", terse=True).style)
+        return {
+            "text": _format_crew_style_debug(debug),
+            "sources": [],
+            "command": "debug_crew_style",
+            "debug": debug,
+        }
+
+    if command in {"/crew_verbose on", "/crew_verbose off"}:
+        sarah_state.crew_verbose = command.endswith(" on")
+        return {
+            "text": f"crew_verbose: {'on' if sarah_state.crew_verbose else 'off'}",
+            "sources": [],
+            "command": "crew_verbose",
+            "verbose": sarah_state.crew_verbose,
+        }
+
+    if command in {"/crew_echo_alex on", "/crew_echo_alex off"}:
+        sarah_state.crew_echo_alex = command.endswith(" on")
+        return {
+            "text": f"crew_echo_alex: {'on' if sarah_state.crew_echo_alex else 'off'}",
+            "sources": [],
+            "command": "crew_echo_alex",
+            "echo_alex": sarah_state.crew_echo_alex,
+        }
+
+    if command == "/crew_show_last":
+        try:
+            payload = _load_latest_crew_payload()
+        except Exception as exc:
+            return {"ok": False, "text": str(exc), "error": str(exc), "sources": [], "command": "crew_show_last"}
+        return {
+            "text": _format_crew_result_markdown(payload, verbose=sarah_state.crew_verbose),
+            "sources": [],
+            "command": "crew_show_last",
+            "result": payload,
+        }
+
+    if command == "/crew_summary_last":
+        try:
+            payload = _load_latest_crew_payload()
+        except Exception as exc:
+            return {"ok": False, "text": str(exc), "error": str(exc), "sources": [], "command": "crew_summary_last"}
+        return {
+            "text": _format_crew_summary_markdown(payload),
+            "sources": [],
+            "command": "crew_summary_last",
+            "result": payload,
+        }
+
+    if command == "/crew_last":
+        info = get_latest_crew_info()
+        return {
+            "text": _format_crew_last(info),
+            "sources": [],
+            "command": "crew_last",
+            "result": info,
+        }
+
+    if command == "/crew_repair_last":
+        result = repair_crew_transcript()
+        return {
+            "ok": result.get("ok", False),
+            "text": _format_crew_repair(result),
+            "sources": [],
+            "command": "crew_repair_last",
+            "result": result,
+        }
+
+    if command == "/crew_end":
+        result = close_active_crew()
+        return {
+            "text": "Active crew conversation closed." if result.get("ok") else result.get("text", "No active crew conversation."),
+            "sources": [],
+            "command": "crew_end",
+            "result": result,
+        }
+
+    if command.startswith("/alex "):
+        return _handle_alex_crew_continue(message[len("/Alex ") :], "Alex", sarah_state)
+
+    if command.startswith("/crew_continue "):
+        return _handle_alex_crew_continue(message[len("/crew_continue ") :], "crew_continue", sarah_state)
+
+    if command.startswith("/crew_new "):
+        try:
+            command_options = parse_crew_command(message[len("/crew_new ") :], terse=False)
+        except ValueError as exc:
+            return _crew_parse_error(exc)
+        sarah_state.last_crew_style_debug = _crew_style_debug(command_options.style)
+        if _requires_unbuilt_churchill(command_options.agents):
+            return _churchill_unavailable_response("crew_new")
+        result = run_multi_agent_dialogue(
+            topic=command_options.topic,
+            agents=command_options.agents,
+            rounds=command_options.rounds,
+            style=command_options.style,
+        )
+        return {"text": _format_crew_result_markdown(result, verbose=sarah_state.crew_verbose), "sources": [], "command": "crew_new", "result": result}
+
+    if command.startswith("/debate_alex "):
+        try:
+            debate_command = parse_debate_alex_command(message[len("/debate_alex ") :])
+        except ValueError as exc:
+            return _crew_parse_error(exc)
+        if debate_command.judge.lower() == "churchill" and not is_agent_endpoint_reachable("Churchill"):
+            return _churchill_unavailable_response("debate_alex")
+        result = _run_debate_alex_command(debate_command)
+        if not result.get("ok", True):
+            return result
+        return {
+            "text": _format_crew_result_markdown(result, verbose=sarah_state.crew_verbose),
+            "sources": [],
+            "command": "debate_alex",
+            "result": result,
+        }
+
+    if command.startswith("/crew_terse "):
+        try:
+            command_options = parse_crew_command(message[len("/crew_terse ") :], terse=True)
+        except ValueError as exc:
+            return _crew_parse_error(exc)
+        sarah_state.last_crew_style_debug = _crew_style_debug(command_options.style)
+        if _requires_unbuilt_churchill(command_options.agents):
+            return _churchill_unavailable_response("crew_terse")
+        result = run_multi_agent_dialogue(
+            topic=command_options.topic,
+            agents=command_options.agents,
+            rounds=command_options.rounds,
+            style=command_options.style,
+        )
+        return {"text": _format_crew_result_markdown(result, verbose=sarah_state.crew_verbose), "sources": [], "command": "crew_terse", "result": result}
+
+    if command.startswith("/crew "):
+        try:
+            command_options = parse_crew_command(message[len("/crew ") :], terse=False)
+        except ValueError as exc:
+            return _crew_parse_error(exc)
+        sarah_state.last_crew_style_debug = _crew_style_debug(command_options.style)
+        if _requires_unbuilt_churchill(command_options.agents):
+            return _churchill_unavailable_response("crew")
+        result = run_multi_agent_dialogue(
+            topic=command_options.topic,
+            agents=command_options.agents,
+            rounds=command_options.rounds,
+            style=command_options.style,
+        )
+        return {"text": _format_crew_result_markdown(result, verbose=sarah_state.crew_verbose), "sources": [], "command": "crew", "result": result}
+
+    if command.startswith("/send "):
+        recipient, body = _parse_send_command(message)
+        sent = send_agent_message(
+            from_agent=LOCAL_AGENT_NAME,
+            to_agent=recipient,
+            subject="Message from FDR",
+            body=body,
+            metadata={"route": "web_slash_command"},
+        )
+        return {
+            "text": f"Sent to {sent['to_agent']} as {sent['id']} in thread {sent['conversation_id']}.",
+            "sources": [],
+            "command": "send_agent_message",
+            "message": sent,
+        }
+
+    if command == "/inbox":
+        return {"text": format_inbox(LOCAL_AGENT_NAME), "sources": [], "command": "inbox"}
+
+    if command.startswith("/read "):
+        message_id = message[len("/read ") :].strip()
+        if mark_message_read(message_id, LOCAL_AGENT_NAME):
+            bus_message = get_message(message_id)
+            return {"text": format_message(bus_message), "sources": [], "command": "read", "message": bus_message}
+        return {"text": "Message not found for FDR.", "sources": [], "command": "read"}
+
+    if command.startswith("/reply "):
+        message_id, body = _parse_reply_command(message)
+        sent = reply_to_message(
+            message_id=message_id,
+            from_agent=LOCAL_AGENT_NAME,
+            body=body,
+            metadata={"route": "web_slash_command"},
+        )
+        return {
+            "text": f"Replied to {sent['to_agent']} in thread {sent['conversation_id']} as {sent['id']}.",
+            "sources": [],
+            "command": "reply_agent_message",
+            "message": sent,
+        }
+
+    if command.startswith("/thread "):
+        conversation_id = message[len("/thread ") :].strip()
+        return {"text": format_thread(conversation_id), "sources": [], "command": "thread"}
+
+    return None
+
+
+def _parse_send_command(message: str) -> tuple[str, str]:
+    payload = message[len("/send ") :].strip()
+    if ":" not in payload:
+        raise HTTPException(status_code=400, detail='Use /send Churchill: message text')
+    recipient, body = payload.split(":", 1)
+    recipient = recipient.strip()
+    body = body.strip()
+    if not recipient or not body:
+        raise HTTPException(status_code=400, detail='Use /send Churchill: message text')
+    return recipient, body
+
+
+def _handle_transcript_command(message: str) -> dict[str, Any] | None:
+    command = message.lower().strip()
+    try:
+        if command == "/transcripts":
+            result = transcripts.transcript_status()
+            return {
+                "text": transcripts.format_transcript_result("Transcript status", result),
+                "sources": [],
+                "command": "transcripts",
+                "result": result,
+            }
+        if command == "/transcripts_keep" or command.startswith("/transcripts_keep "):
+            keep_n = transcripts.parse_keep_arg(message[len("/transcripts_keep") :])
+            result = transcripts.keep_newest_conversations(keep_n=keep_n)
+            return {
+                "text": transcripts.format_transcript_result("Transcript keep result", result),
+                "sources": [],
+                "command": "transcripts_keep",
+                "result": result,
+            }
+        if command == "/transcripts_archive" or command.startswith("/transcripts_archive "):
+            days = transcripts.parse_archive_days_arg(message[len("/transcripts_archive") :])
+            result = transcripts.archive_older_than(days=days)
+            return {
+                "text": transcripts.format_transcript_result("Transcript archive result", result),
+                "sources": [],
+                "command": "transcripts_archive",
+                "result": result,
+            }
+        if command == "/transcripts_prune" or command.startswith("/transcripts_prune "):
+            days, keep = transcripts.parse_prune_args(message[len("/transcripts_prune") :])
+            result = transcripts.prune_transcripts(days=days, keep=keep)
+            return {
+                "text": transcripts.format_transcript_result("Transcript prune result", result),
+                "sources": [],
+                "command": "transcripts_prune",
+                "result": result,
+            }
+        if command == "/transcripts_clear":
+            text = (
+                "This will delete all live FDR/Churchill transcript .md/.json files except latest convenience files "
+                "if preserved. To confirm, run: /transcripts_clear confirm"
+            )
+            return {"text": text, "sources": [], "command": "transcripts_clear"}
+        if command == "/transcripts_clear confirm":
+            result = transcripts.clear_transcripts(preserve_latest=True)
+            return {
+                "text": transcripts.format_transcript_result("Transcript clear result", result),
+                "sources": [],
+                "command": "transcripts_clear",
+                "result": result,
+            }
+        if command == "/transcripts_archive_all":
+            text = "To archive all live FDR/Churchill transcripts, run: /transcripts_archive_all confirm"
+            return {"text": text, "sources": [], "command": "transcripts_archive_all"}
+        if command == "/transcripts_archive_all confirm":
+            result = transcripts.archive_all_transcripts(preserve_latest=True)
+            return {
+                "text": transcripts.format_transcript_result("Transcript archive-all result", result),
+                "sources": [],
+                "command": "transcripts_archive_all",
+                "result": result,
+            }
+    except ValueError as exc:
+        return {"text": f"Transcript command failed: {exc}", "sources": [], "command": "transcripts_error", "error": str(exc)}
+    return None
+
+
+def _handle_web_cache_command(message: str) -> dict[str, Any] | None:
+    command = message.lower().strip()
+    try:
+        if command == "/web_cache":
+            result = web_cache.web_cache_status()
+            return {
+                "text": web_cache.format_web_cache_result("Web cache status", result),
+                "sources": [],
+                "command": "web_cache",
+                "result": result,
+            }
+        if command == "/web_cache_validate":
+            result = web_cache.validate_web_cache_json()
+            return {
+                "text": web_cache.format_web_cache_result("Web cache validation", result),
+                "sources": [],
+                "command": "web_cache_validate",
+                "result": result,
+            }
+        if command == "/web_cache_keep" or command.startswith("/web_cache_keep "):
+            keep_n = web_cache.parse_keep_arg(message[len("/web_cache_keep") :])
+            result = web_cache.keep_newest_cache_files(keep_n=keep_n)
+            return {
+                "text": web_cache.format_web_cache_result("Web cache keep result", result),
+                "sources": [],
+                "command": "web_cache_keep",
+                "result": result,
+            }
+        if command == "/web_cache_archive" or command.startswith("/web_cache_archive "):
+            days = web_cache.parse_archive_days_arg(message[len("/web_cache_archive") :])
+            result = web_cache.archive_cache_older_than(days=days)
+            return {
+                "text": web_cache.format_web_cache_result("Web cache archive result", result),
+                "sources": [],
+                "command": "web_cache_archive",
+                "result": result,
+            }
+        if command == "/web_cache_prune" or command.startswith("/web_cache_prune "):
+            days, keep = web_cache.parse_prune_args(message[len("/web_cache_prune") :])
+            result = web_cache.prune_web_cache(days=days, keep=keep)
+            return {
+                "text": web_cache.format_web_cache_result("Web cache prune result", result),
+                "sources": [],
+                "command": "web_cache_prune",
+                "result": result,
+            }
+        if command == "/web_cache_clear":
+            text = "This will delete all FDR web-cache JSON files from data\\web_cache. To confirm, run: /web_cache_clear confirm"
+            return {"text": text, "sources": [], "command": "web_cache_clear"}
+        if command == "/web_cache_clear confirm":
+            result = web_cache.clear_web_cache()
+            return {
+                "text": web_cache.format_web_cache_result("Web cache clear result", result),
+                "sources": [],
+                "command": "web_cache_clear",
+                "result": result,
+            }
+        if command == "/web_cache_archive_all":
+            text = "To archive all FDR web-cache JSON files, run: /web_cache_archive_all confirm"
+            return {"text": text, "sources": [], "command": "web_cache_archive_all"}
+        if command == "/web_cache_archive_all confirm":
+            result = web_cache.archive_all_web_cache()
+            return {
+                "text": web_cache.format_web_cache_result("Web cache archive-all result", result),
+                "sources": [],
+                "command": "web_cache_archive_all",
+                "result": result,
+            }
+        if command == "/web_cache_delete_corrupt":
+            text = "This will delete corrupt FDR web-cache JSON files only. To confirm, run: /web_cache_delete_corrupt confirm"
+            return {"text": text, "sources": [], "command": "web_cache_delete_corrupt"}
+        if command == "/web_cache_delete_corrupt confirm":
+            result = web_cache.delete_corrupt_web_cache()
+            return {
+                "text": web_cache.format_web_cache_result("Web cache delete-corrupt result", result),
+                "sources": [],
+                "command": "web_cache_delete_corrupt",
+                "result": result,
+            }
+    except ValueError as exc:
+        return {"text": f"Web cache command failed: {exc}", "sources": [], "command": "web_cache_error", "error": str(exc)}
+    return None
+
+
+def _parse_reply_command(message: str) -> tuple[str, str]:
+    payload = message[len("/reply ") :].strip()
+    if ":" not in payload:
+        raise HTTPException(status_code=400, detail='Use /reply <message_id>: message text')
+    message_id, body = payload.split(":", 1)
+    message_id = message_id.strip()
+    body = body.strip()
+    if not message_id or not body:
+        raise HTTPException(status_code=400, detail='Use /reply <message_id>: message text')
+    return message_id, body
+
+
+def _crew_parse_error(exc: Exception) -> dict[str, Any]:
+    return {
+        "ok": False,
+        "error": "Crew command parse failed",
+        "details": str(exc),
+        "text": f"Crew command parse failed: {exc}",
+        "sources": [],
+        "command": "crew_parse_error",
+    }
+
+
+def _requires_unbuilt_churchill(agents: list[str]) -> bool:
+    return any(agent.lower() == "churchill" for agent in agents) and not is_agent_endpoint_reachable("Churchill")
+
+
+def _churchill_not_running_message() -> str:
+    return (
+        "Churchill is not running at http://127.0.0.1:8011/agent/respond. "
+        "Build and start Churchill on port 8011, then retry."
+    )
+
+
+def _churchill_unavailable_response(command: str) -> dict[str, Any]:
+    text = _churchill_not_running_message()
+    return {"ok": False, "error": text, "text": text, "sources": [], "command": command}
+
+
+def _run_debate_alex_command(debate_command: Any) -> dict[str, Any]:
+    try:
+        return run_debate_alex(debate_command)
+    except Exception as exc:
+        return {
+            "ok": False,
+            "error": "Debate Alex orchestration failed",
+            "details": str(exc),
+            "text": str(exc),
+            "sources": [],
+            "command": "debate_alex",
+        }
+
+
+def _handle_alex_crew_continue(message: str, command_name: str, sarah_state: AppState) -> dict[str, Any]:
+    try:
+        result = continue_crew_with_alex(message, from_browser_agent=LOCAL_AGENT_NAME)
+    except Exception as exc:
+        return {
+            "ok": False,
+            "error": "Crew continuation failed",
+            "details": str(exc),
+            "text": f"Crew continuation failed: {exc}",
+            "sources": [],
+            "command": command_name,
+        }
+    if not result.get("ok"):
+        return {
+            "ok": False,
+            "error": result.get("error", "Crew continuation failed"),
+            "text": result.get("text", str(result.get("error", "Crew continuation failed"))),
+            "sources": [],
+            "command": command_name,
+            "result": result,
+        }
+    return {
+        "ok": True,
+        "text": _format_crew_result_markdown(
+            result,
+            verbose=sarah_state.crew_verbose,
+            recent_only=True,
+            echo_alex=sarah_state.crew_echo_alex,
+        ),
+        "sources": [],
+        "command": command_name,
+        "result": result,
+    }
+
+
+def _format_crew_conversation_only(result: dict[str, Any], recent_only: bool = False, echo_alex: bool = False) -> str:
+    style = result.get("crew_style") or {}
+    turns = result.get("turns", [])
+    visible_turns = turns[-3:] if recent_only else turns
+    lines: list[str] = []
+    for turn in visible_turns:
+        speaker = str(turn.get("speaker", "")).strip()
+        if speaker not in {"Alex", "Alex-proxy", "FDR", "Churchill"}:
+            continue
+        if speaker == "Alex" and not echo_alex:
+            continue
+        message = _clean_visible_crew_message(str(turn.get("message", "")), style)
+        if not message:
+            continue
+        lines.extend([f"{speaker}:", message, ""])
+    synthesis = result.get("synthesis")
+    if style.get("allow_synthesis") and synthesis:
+        lines.extend(["Final Synthesis", _format_markdown_value(synthesis.get("combined_answer_for_alex", "")).strip(), ""])
+    return "\n".join(lines).strip() + "\n"
+
+
+def _clean_visible_crew_message(message: str, style: dict[str, Any]) -> str:
+    text = message.strip()
+    preserve_report_shape = bool(style.get("perrow_explicitly_requested")) and style.get("display_mode") != "conversation_only"
+    if preserve_report_shape:
+        return text
+    forbidden = (
+        "Situation compression",
+        "Perrow placement",
+        "Cascade timeline",
+        "Hidden couplings",
+        "Patch recommendations",
+        "What to monitor",
+        "Final Synthesis",
+        "Points of agreement",
+        "Points of disagreement",
+        "Recommended next question",
+    )
+    for heading in forbidden:
+        text = text.replace(heading, "")
+    text = "\n".join(
+        line
+        for line in text.splitlines()
+        if line.strip().strip(":") not in forbidden
+        and not line.lstrip().startswith(("-", "*", "•"))
+        and not re.match(r"^\s*\d+[\.)]\s+", line)
+    )
+    words = text.split()
+    max_words = style.get("max_words_per_turn") or (60 if style.get("display_mode") == "conversation_only" else None)
+    if max_words and len(words) > int(max_words * 1.2):
+        text = " ".join(words[: int(max_words)]).rstrip(" ,;:") + "."
+    return "\n".join(line.rstrip() for line in text.splitlines() if line.strip()).strip()
+
+
+def _format_crew_result_markdown(
+    result: dict[str, Any],
+    verbose: bool = False,
+    recent_only: bool = False,
+    echo_alex: bool = False,
+) -> str:
+    style = result.get("crew_style") or {}
+    if not verbose:
+        return _format_crew_conversation_only(result, recent_only=recent_only, echo_alex=echo_alex)
+    allow_bullets = style.get("allow_bullets", True)
+    allow_headings = style.get("allow_headings", True)
+    use_round_labels = style.get("use_round_labels", True) and allow_headings
+    terse = style.get("mode") == "conversational" and not allow_headings
+    lines = [
+        f"Crew dialogue complete: {result.get('conversation_id', '')}",
+        "",
+        "Transcript:",
+        str(result.get("transcript_markdown_path", "")),
+        "",
+    ]
+    participants = result.get("agents") or []
+    if allow_bullets:
+        lines.append("Participants:")
+        lines.extend(f"- {agent}: responded" for agent in participants)
+    else:
+        lines.append(f"Participants: {', '.join(str(agent) for agent in participants)}")
+    count_label = "Turns completed" if not use_round_labels else "Rounds completed"
+    count_value = result.get("total_turns", len(result.get("turns", []))) if not use_round_labels else result.get("rounds_run", 0)
+    lines.extend(["", f"{count_label}: {count_value}", "", "---", ""])
+
+    for turn in result.get("turns", []):
+        speaker = turn.get("speaker", "")
+        label = f"## Round {turn.get('round_number', '')} — {speaker}" if use_round_labels else f"{speaker}:"
+        lines.extend(
+            [
+                label,
+                "",
+                str(turn.get("message", "")).strip(),
+                "",
+                "---",
+                "",
+            ]
+        )
+
+    synthesis = result.get("synthesis")
+    if synthesis:
+        if terse:
+            lines.extend(["Final verdict:", "", _format_markdown_value(synthesis.get("combined_answer_for_alex", "Not available."))])
+        else:
+            lines.extend(_format_synthesis_markdown_lines(synthesis))
+    else:
+        lines.extend(["## Final Synthesis", "", "Synthesis disabled."])
+    return "\n".join(lines).strip() + "\n"
+
+
+def _format_crew_last(info: dict[str, Any]) -> str:
+    if not info.get("ok"):
+        return str(info.get("text") or info.get("error") or "No active crew conversation.")
+    return "\n".join(
+        [
+            f"active_conversation_id: {info.get('active_conversation_id') or 'none'}",
+            f"latest_conversation_id: {info.get('latest_conversation_id') or 'none'}",
+            f"transcript_md_path: {info.get('transcript_md_path') or info.get('transcript_path') or ''}",
+            f"transcript_md_exists: {str(info.get('transcript_md_exists', False)).lower()}",
+            f"transcript_json_path: {info.get('transcript_json_path') or ''}",
+            f"transcript_json_exists: {str(info.get('transcript_json_exists', False)).lower()}",
+            "latest_multi_agent_transcript.md exists: "
+            + str(info.get("latest_multi_agent_transcript_md_exists", False)).lower(),
+            "latest_multi_agent_transcript.json exists: "
+            + str(info.get("latest_multi_agent_transcript_json_exists", False)).lower(),
+            f"status: {info.get('status', 'unknown')}",
+        ]
+    )
+
+
+def _format_crew_repair(result: dict[str, Any]) -> str:
+    lines = [
+        "Crew repair:",
+        f"ok: {str(result.get('ok', False)).lower()}",
+        f"conversation_id: {result.get('conversation_id', '')}",
+    ]
+    if result.get("error"):
+        lines.append(f"error: {result['error']}")
+    repaired = result.get("repaired") or []
+    if repaired:
+        lines.append("repaired:")
+        lines.extend(f"- {item}" for item in repaired)
+    else:
+        lines.append("repaired: none")
+    return "\n".join(lines)
+
+
+def _format_crew_summary_markdown(result: dict[str, Any]) -> str:
+    synthesis = result.get("synthesis") or {}
+    combined = synthesis.get("combined_answer_for_alex", "No combined answer available.")
+    participants = ", ".join(result.get("agents") or [])
+    return "\n".join(
+        [
+            f"Topic: {result.get('topic', '')}",
+            "",
+            f"Rounds: {result.get('rounds_run', 0)}",
+            "",
+            f"Participants: {participants}",
+            "",
+            "## Combined answer for Alex",
+            "",
+            _format_markdown_value(combined),
+        ]
+    ).strip() + "\n"
+
+
+def _crew_style_debug(style) -> dict[str, Any]:
+    return {
+        "parsed_max_words": style.max_words_per_turn,
+        "total_turns": style.total_turns,
+        "style": style.mode,
+        "bullets_allowed": style.allow_bullets,
+        "numbered_lists_allowed": style.allow_numbered_lists,
+        "headings_allowed": style.allow_headings,
+        "reports_allowed": style.allow_reports,
+        "perrow_template_suppressed": style.suppress_perrow_template,
+    }
+
+
+def _format_crew_style_debug(debug: dict[str, Any]) -> str:
+    return "\n".join(
+        [
+            "Crew style debug:",
+            f"parsed_max_words: {debug.get('parsed_max_words')}",
+            f"total_turns: {debug.get('total_turns')}",
+            f"style: {debug.get('style')}",
+            f"bullets_allowed: {debug.get('bullets_allowed')}",
+            f"numbered_lists_allowed: {debug.get('numbered_lists_allowed')}",
+            f"headings_allowed: {debug.get('headings_allowed')}",
+            f"reports_allowed: {debug.get('reports_allowed')}",
+            f"perrow_template_suppressed: {debug.get('perrow_template_suppressed')}",
+        ]
+    )
+
+
+def _load_latest_crew_payload() -> dict[str, Any]:
+    json_candidates = sorted(
+        TRANSCRIPT_DIR.glob("*.json"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    ) if TRANSCRIPT_DIR.exists() else []
+    if json_candidates:
+        return json.loads(json_candidates[0].read_text(encoding="utf-8"))
+    try:
+        return load_crew_payload()
+    except FileNotFoundError:
+        pass
+    latest_path = TRANSCRIPT_DIR / "latest_multi_agent_transcript.md"
+    if latest_path.exists():
+        repair = repair_crew_transcript()
+        payload = repair.get("payload")
+        if isinstance(payload, dict):
+            return payload
+    raise HTTPException(status_code=404, detail="No crew transcript found.")
+
+
+def _format_synthesis_markdown_lines(synthesis: dict[str, Any]) -> list[str]:
+    sections = [
+        ("points_of_agreement", "Points of agreement"),
+        ("points_of_disagreement", "Points of disagreement"),
+        ("sarah_specific_view", "FDR-specific view"),
+        ("astrid_specific_view", "Churchill-specific view"),
+        ("combined_answer_for_alex", "Combined answer for Alex"),
+        ("recommended_next_question", "Recommended next question"),
+    ]
+    lines = ["## Final Synthesis", ""]
+    for key, title in sections:
+        lines.extend([f"### {title}", "", _format_markdown_value(synthesis.get(key, "Not available.")), ""])
+    return lines
+
+
+def _format_markdown_value(value: Any) -> str:
+    if isinstance(value, list):
+        return "\n".join(f"- {str(item).strip()}" for item in value)
+    return str(value).strip()
+
+
+def _format_synthesis_text(synthesis: dict[str, Any] | None) -> str:
+    if not synthesis:
+        return "Synthesis disabled."
+    lines = ["Final synthesis:"]
+    for key, value in synthesis.items():
+        label = key.replace("_", " ")
+        if isinstance(value, list):
+            lines.append(f"{label}: " + "; ".join(str(item) for item in value))
+        else:
+            lines.append(f"{label}: {value}")
+    return "\n".join(lines)
+
+
+def _multi_agent_page_html() -> str:
+    return """
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FDR/Churchill Crew</title>
+    <style>
+      body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #101114; color: #f4f1ea; }
+      label, textarea, input { display: block; width: 100%; max-width: 900px; }
+      textarea { min-height: 120px; margin: .5rem 0 1rem; }
+      input { margin: .5rem 0 1rem; }
+      button { padding: .6rem 1rem; }
+      pre { white-space: pre-wrap; background: #191b20; padding: 1rem; max-width: 1100px; }
+    </style>
+  </head>
+  <body>
+    <h1>FDR/Churchill Crew</h1>
+    <label>Topic<textarea id="topic"></textarea></label>
+    <label>Agents<input id="agents" value="FDR,Churchill"></label>
+    <label>Rounds<input id="rounds" type="number" min="1" max="4" value="4"></label>
+    <button id="start">Start</button>
+    <p id="link"></p>
+    <pre id="out">Idle.</pre>
+    <script>
+      document.getElementById('start').onclick = async () => {
+        const out = document.getElementById('out');
+        out.textContent = 'Running...';
+        const response = await fetch('/multi_agent/run', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            topic: document.getElementById('topic').value,
+            agents: document.getElementById('agents').value,
+            rounds: Number(document.getElementById('rounds').value || 4)
+          })
+        });
+        const payload = await response.json();
+        const link = document.getElementById('link');
+        if (payload.markdown_url) {
+          link.innerHTML = `<a href="${payload.markdown_url}" target="_blank" rel="noreferrer">Open transcript markdown</a>`;
+        } else {
+          link.textContent = '';
+        }
+        out.textContent = JSON.stringify(payload, null, 2);
+      };
+    </script>
+  </body>
+</html>
+"""
+
+
+app = create_app()
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run the FDR v1.0 local web UI.")
+    parser.add_argument("--host", default="127.0.0.1", help="Bind host. Defaults to 127.0.0.1.")
+    parser.add_argument("--port", type=int, default=8010, help="Bind port. Defaults to 8010.")
+    return parser
+
+
+def main() -> None:
+    import uvicorn
+
+    args = build_parser().parse_args()
+    if args.host != "127.0.0.1":
+        print("Warning: FDR web UI has no authentication. Prefer --host 127.0.0.1.")
+    uvicorn.run("app.ui.web_app:app", host=args.host, port=args.port, reload=False)
+
+
+if __name__ == "__main__":
+    main()

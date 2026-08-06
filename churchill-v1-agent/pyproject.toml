@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "churchill-v1-agent"
+version = "0.1.0"
+description = "Local conversational agent scaffold for Churchill v1.0."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "networkx>=3.3",
+    "openai>=1.0.0",
+    "pypdf>=4.0.0",
+    "PyYAML>=6.0.0",
+    "python-docx>=1.1.0",
+    "uvicorn>=0.30.0",
+]
+
+[project.optional-dependencies]
+mic = [
+    "numpy>=1.26.0",
+    "sounddevice>=0.4.6",
+]
+local-whisper = [
+    "faster-whisper>=1.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]

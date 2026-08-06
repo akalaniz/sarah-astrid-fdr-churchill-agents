@@ -1,0 +1,61 @@
+{
+  "active_conversation_id": "f5dd0f3130ff44728c0b32a4dffa570e",
+  "latest_conversation_id": "f5dd0f3130ff44728c0b32a4dffa570e",
+  "command_type": "crew",
+  "use_alex_proxy": false,
+  "real_user": "Alex",
+  "proxy_user_label": null,
+  "agents": [
+    "Churchill",
+    "FDR"
+  ],
+  "judge": null,
+  "first": null,
+  "first_speaker": "Churchill",
+  "turn_order": [
+    "Churchill",
+    "FDR"
+  ],
+  "planned_turn_order": [
+    "Churchill",
+    "FDR",
+    "Churchill",
+    "FDR",
+    "Churchill",
+    "FDR"
+  ],
+  "route_handler_used": "crew",
+  "requested_turns": 6,
+  "parsed_rounds": 3,
+  "parsed_max_words": 75,
+  "number_of_agents": 2,
+  "total_agent_turns": 6,
+  "joint_verdict_requested": false,
+  "allow_partial": false,
+  "topic": "Debate \"Apply DIME theory to the colonization of the Solar System with a US China space race. Churchill, be wicked humorous.\"\nKeep it short:\n- 3 rounds only\n- Each turn max 75 words\n- No full CAS report\n- No bullet flood\n- Actual give-and-take: each agent must directly respond to the previous agent",
+  "transcript_path": "C:\\Users\\AlexA\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_fdr_churchill_bus\\transcripts\\f5dd0f3130ff44728c0b32a4dffa570e.md",
+  "transcript_md_path": "C:\\Users\\AlexA\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_fdr_churchill_bus\\transcripts\\f5dd0f3130ff44728c0b32a4dffa570e.md",
+  "transcript_json_path": "C:\\Users\\AlexA\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_fdr_churchill_bus\\transcripts\\f5dd0f3130ff44728c0b32a4dffa570e.json",
+  "style": {
+    "max_words": 75,
+    "style": "standard",
+    "allow_bullets": false,
+    "allow_reports": false
+  },
+  "style_settings": {
+    "max_words_per_turn": 75,
+    "total_turns": 6,
+    "mode": "standard",
+    "allow_bullets": false,
+    "allow_reports": false,
+    "display_mode": "conversation_only",
+    "allow_synthesis": false,
+    "perrow_explicitly_requested": false,
+    "parsed_rounds": 3,
+    "joint_verdict_requested": false,
+    "joint_verdict_max_words": 80
+  },
+  "status": "open",
+  "turns_completed": 6,
+  "updated_at": "2026-07-07T05:26:45.124435+00:00"
+}

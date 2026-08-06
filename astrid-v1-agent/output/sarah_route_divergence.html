@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astrid Route Divergence</title>
+  <style>
+    body { margin: 0; background: #eef1f6; color: #172033; font-family: Segoe UI, Arial, sans-serif; }
+    main { max-width: 1180px; margin: 0 auto; padding: 24px; }
+    .panel { background: #fbfcff; border: 1px solid #d8deea; border-radius: 8px; padding: 16px; box-shadow: 0 8px 24px rgba(23,32,51,0.08); }
+    svg { width: 100%; height: auto; display: block; }
+    .title { font-size: 24px; font-weight: 700; }
+    .axis-label { font-size: 15px; font-weight: 650; fill: #30394d; }
+    .tick, .caption, .edge-label { font-size: 12px; fill: #586174; }
+    .point-label, .row-label { font-size: 12px; fill: #172033; font-weight: 600; }
+    .node-label { font-size: 12px; fill: white; font-weight: 700; }
+    .bar-value { font-size: 12px; fill: #30394d; font-weight: 650; }
+    .resolved { fill-opacity: 0.28; stroke: #172033; stroke-width: 2; }
+    .pending { fill-opacity: 0.55; stroke: #172033; stroke-width: 2; stroke-dasharray: 4,4; }
+    .active { fill-opacity: 0.92; stroke: #172033; stroke-width: 1; }
+    p, li { line-height: 1.45; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      
+    <svg viewBox="0 0 1080 620" role="img" aria-label="Sarah route divergence graph">
+      <rect width="1080" height="620" fill="#fbfcff"/>
+      <text x="540.0" y="34" text-anchor="middle" class="title">Route Divergence Graph</text>
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 z" fill="#172033"/>
+        </marker>
+      </defs>
+      <line x1="130" y1="120" x2="360" y2="235" stroke="#2f6f4e" stroke-width="3" marker-end="url(#arrow)"/><text x="245.0" y="169.5" text-anchor="middle" class="edge-label">shared path</text><line x1="130" y1="350" x2="360" y2="235" stroke="#2f6f4e" stroke-width="3" marker-end="url(#arrow)"/><text x="245.0" y="284.5" text-anchor="middle" class="edge-label">required shared path</text><line x1="360" y1="235" x2="570" y2="235" stroke="#2f6f4e" stroke-width="3" marker-end="url(#arrow)"/><text x="465.0" y="227.0" text-anchor="middle" class="edge-label">uses</text><line x1="570" y1="235" x2="790" y2="155" stroke="#2f6f4e" stroke-width="3" marker-end="url(#arrow)"/><text x="680.0" y="187.0" text-anchor="middle" class="edge-label">selects mode</text><line x1="570" y1="235" x2="790" y2="315" stroke="#2f6f4e" stroke-width="3" marker-end="url(#arrow)"/><text x="680.0" y="267.0" text-anchor="middle" class="edge-label">same settings</text><line x1="570" y1="235" x2="990" y2="90" stroke="#2f6f4e" stroke-width="3" marker-end="url(#arrow)"/><text x="780.0" y="154.5" text-anchor="middle" class="edge-label">loads</text><line x1="570" y1="235" x2="990" y2="235" stroke="#2f6f4e" stroke-width="3" marker-end="url(#arrow)"/><text x="780.0" y="227.0" text-anchor="middle" class="edge-label">injects</text><line x1="130" y1="350" x2="570" y2="475" stroke="#c75146" stroke-width="4" marker-end="url(#arrow)" stroke-dasharray="6,6"/><text x="350.0" y="404.5" text-anchor="middle" class="edge-label">BYPASSES / DIVERGES_FROM</text><line x1="570" y1="475" x2="790" y2="155" stroke="#c75146" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="6,6"/><text x="680.0" y="307.0" text-anchor="middle" class="edge-label">adult_intimacy_mode not selected</text><line x1="570" y1="475" x2="790" y2="315" stroke="#c75146" stroke-width="3" marker-end="url(#arrow)" stroke-dasharray="6,6"/><text x="680.0" y="387.0" text-anchor="middle" class="edge-label">different model_config</text>
+      <g><rect x="48" y="92" width="164" height="56" rx="8" fill="#5f8dd3" stroke="#172033" stroke-width="1.2"/><text x="130" y="125" text-anchor="middle" class="node-label">PowerShell CLI route</text></g><g><rect x="48" y="322" width="164" height="56" rx="8" fill="#5f8dd3" stroke="#172033" stroke-width="1.2"/><text x="130" y="355" text-anchor="middle" class="node-label">Web browser route</text></g><g><rect x="278" y="207" width="164" height="56" rx="8" fill="#57a773" stroke="#172033" stroke-width="1.2"/><text x="360" y="240" text-anchor="middle" class="node-label">Shared Astrid engine</text></g><g><rect x="488" y="207" width="164" height="56" rx="8" fill="#57a773" stroke="#172033" stroke-width="1.2"/><text x="570" y="240" text-anchor="middle" class="node-label">Prompt builder</text></g><g><rect x="708" y="127" width="164" height="56" rx="8" fill="#57a773" stroke="#172033" stroke-width="1.2"/><text x="790" y="160" text-anchor="middle" class="node-label">style_engine</text></g><g><rect x="708" y="287" width="164" height="56" rx="8" fill="#57a773" stroke="#172033" stroke-width="1.2"/><text x="790" y="320" text-anchor="middle" class="node-label">model_config</text></g><g><rect x="908" y="62" width="164" height="56" rx="8" fill="#57a773" stroke="#172033" stroke-width="1.2"/><text x="990" y="95" text-anchor="middle" class="node-label">master prompt</text></g><g><rect x="908" y="207" width="164" height="56" rx="8" fill="#57a773" stroke="#172033" stroke-width="1.2"/><text x="990" y="240" text-anchor="middle" class="node-label">RAG / memory / web context</text></g><g><rect x="488" y="447" width="164" height="56" rx="8" fill="#c75146" stroke="#172033" stroke-width="1.2"/><text x="570" y="480" text-anchor="middle" class="node-label">Route divergence failures</text></g>
+    </svg>
+    
+    </section>
+    <section>
+      <p>Green edges show the intended shared route. Red dashed edges show known divergence hazards.</p><ul><li><b>web_route_bypasses_style_engine</b>: risk=72</li><li><b>web_route_bypasses_master_prompt</b>: risk=80</li><li><b>web_route_uses_different_model</b>: risk=63</li><li><b>cli_and_browser_personality_diverge</b>: risk=72</li><li><b>evals_pass_cli_fail_browser</b>: risk=64</li></ul>
+    </section>
+  </main>
+</body>
+</html>

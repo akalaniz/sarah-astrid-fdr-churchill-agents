@@ -1,0 +1,104 @@
+{
+  "node_count": 88,
+  "edge_count": 68,
+  "matrix_counts": {
+    "complex_tight": 23,
+    "linear_tight": 3,
+    "linear_loose": 5,
+    "complex_loose": 6,
+    "failure_mode": 41,
+    "control": 10
+  },
+  "kind_counts": {
+    "prompt": 2,
+    "persona": 4,
+    "mode": 4,
+    "retrieval": 5,
+    "memory": 4,
+    "route": 4,
+    "orchestration": 4,
+    "config": 1,
+    "safety": 1,
+    "tooling": 4,
+    "evaluation": 1,
+    "state": 1,
+    "frontend": 1,
+    "audio": 1,
+    "failure_mode": 41,
+    "control": 10
+  },
+  "edge_kind_counts": {
+    "CAN_TRIGGER": 22,
+    "constrains": 2,
+    "depends_on": 9,
+    "validates": 3,
+    "selects_mode": 3,
+    "routes_to": 2,
+    "BYPASSES": 1,
+    "injects_context": 2,
+    "shares_state": 2,
+    "AMPLIFIES": 1,
+    "MASKS": 2,
+    "CORRUPTS": 1,
+    "MITIGATES": 17,
+    "RECOVERS_WITH": 1
+  },
+  "highest_risk_components": [
+    {
+      "component_id": "web_route_bypasses_master_prompt",
+      "label": "web route bypasses master_prompt",
+      "risk_score": 80,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    },
+    {
+      "component_id": "unsafe_military_tactical_specificity",
+      "label": "unsafe military tactical specificity",
+      "risk_score": 80,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    },
+    {
+      "component_id": "military_coa_becomes_operational_detail",
+      "label": "military COA becomes operational detail",
+      "risk_score": 80,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    },
+    {
+      "component_id": "sarah_becomes_generic_assistant",
+      "label": "Sarah becomes generic assistant",
+      "risk_score": 72,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    },
+    {
+      "component_id": "web_route_bypasses_style_engine",
+      "label": "web route bypasses style_engine",
+      "risk_score": 72,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    },
+    {
+      "component_id": "user_sees_browser_sarah_as_lobotomized",
+      "label": "user sees browser Sarah as lobotomized",
+      "risk_score": 72,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    },
+    {
+      "component_id": "sarah_hallucinates_biography_or_relationship_facts",
+      "label": "Sarah hallucinates biography or relationship facts",
+      "risk_score": 72,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    },
+    {
+      "component_id": "cli_and_browser_personality_diverge",
+      "label": "CLI and browser personality diverge",
+      "risk_score": 72,
+      "matrix_cell": "failure_mode",
+      "kind": "failure_mode"
+    }
+  ]
+}

@@ -1,0 +1,2281 @@
+[
+  {
+    "seed_component": "web_browser_route",
+    "steps": [
+      {
+        "component_id": "web_browser_route",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_engine",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "routes_to via Browser messages enter the shared engine."
+      },
+      {
+        "component_id": "style_engine",
+        "depth": 1,
+        "activation": 0.6415,
+        "reason": "BYPASSES via web_browser_route BYPASSES style_engine"
+      },
+      {
+        "component_id": "prompt_builder",
+        "depth": 2,
+        "activation": 0.4162,
+        "reason": "depends_on via Engine delegates final prompt assembly."
+      },
+      {
+        "component_id": "model_config",
+        "depth": 2,
+        "activation": 0.305,
+        "reason": "depends_on via Engine loads shared settings and model client."
+      },
+      {
+        "component_id": "user_profile_memory",
+        "depth": 2,
+        "activation": 0.2872,
+        "reason": "shares_state via Engine retrieves durable user memory."
+      },
+      {
+        "component_id": "agent_profile_memory",
+        "depth": 2,
+        "activation": 0.2427,
+        "reason": "shares_state via Engine may retrieve durable Sarah/agent continuity."
+      },
+      {
+        "component_id": "adult_intimacy_mode",
+        "depth": 2,
+        "activation": 0.3416,
+        "reason": "selects_mode via Adult intimacy triggers select embodied mode."
+      },
+      {
+        "component_id": "cas_dime_geopolitics_mode",
+        "depth": 2,
+        "activation": 0.349,
+        "reason": "selects_mode via Geopolitical triggers select CAS/DIME mode."
+      },
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 2,
+        "activation": 0.3708,
+        "reason": "CAN_TRIGGER via Bypassed style engine means adult_intimacy_mode is not selected."
+      },
+      {
+        "component_id": "master_prompt",
+        "depth": 3,
+        "activation": 0.2547,
+        "reason": "depends_on via Prompt builder loads immutable identity layer."
+      },
+      {
+        "component_id": "constitution",
+        "depth": 3,
+        "activation": 0.2547,
+        "reason": "depends_on via Prompt builder loads Sarah constitution."
+      },
+      {
+        "component_id": "rag_retriever",
+        "depth": 3,
+        "activation": 0.2264,
+        "reason": "injects_context via Retrieved chunks feed canon/source context."
+      },
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 3,
+        "activation": 0.2269,
+        "reason": "CAN_TRIGGER via Missing intimacy mode pushes Sarah into coy or sterile behavior."
+      }
+    ],
+    "total_activation": 5.5287,
+    "affected_components": [
+      "web_browser_route",
+      "sarah_engine",
+      "style_engine",
+      "prompt_builder",
+      "model_config",
+      "user_profile_memory",
+      "agent_profile_memory",
+      "adult_intimacy_mode",
+      "cas_dime_geopolitics_mode",
+      "adult_intimacy_mode_not_selected",
+      "master_prompt",
+      "constitution",
+      "rag_retriever",
+      "sarah_becomes_coy_or_sterile"
+    ]
+  },
+  {
+    "seed_component": "sarah_engine",
+    "steps": [
+      {
+        "component_id": "sarah_engine",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "prompt_builder",
+        "depth": 1,
+        "activation": 0.68,
+        "reason": "depends_on via Engine delegates final prompt assembly."
+      },
+      {
+        "component_id": "model_config",
+        "depth": 1,
+        "activation": 0.4983,
+        "reason": "depends_on via Engine loads shared settings and model client."
+      },
+      {
+        "component_id": "user_profile_memory",
+        "depth": 1,
+        "activation": 0.4693,
+        "reason": "shares_state via Engine retrieves durable user memory."
+      },
+      {
+        "component_id": "agent_profile_memory",
+        "depth": 1,
+        "activation": 0.3966,
+        "reason": "shares_state via Engine may retrieve durable Sarah/agent continuity."
+      },
+      {
+        "component_id": "master_prompt",
+        "depth": 2,
+        "activation": 0.4162,
+        "reason": "depends_on via Prompt builder loads immutable identity layer."
+      },
+      {
+        "component_id": "constitution",
+        "depth": 2,
+        "activation": 0.4162,
+        "reason": "depends_on via Prompt builder loads Sarah constitution."
+      },
+      {
+        "component_id": "style_engine",
+        "depth": 2,
+        "activation": 0.3673,
+        "reason": "selects_mode via Prompt builder injects mode/style directives."
+      },
+      {
+        "component_id": "rag_retriever",
+        "depth": 2,
+        "activation": 0.3699,
+        "reason": "injects_context via Retrieved chunks feed canon/source context."
+      },
+      {
+        "component_id": "web_tools",
+        "depth": 2,
+        "activation": 0.2619,
+        "reason": "injects_context via Current-event context can enter prompt."
+      },
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 3,
+        "activation": 0.2123,
+        "reason": "CAN_TRIGGER via Bypassed style engine means adult_intimacy_mode is not selected."
+      },
+      {
+        "component_id": "vector_store",
+        "depth": 3,
+        "activation": 0.2169,
+        "reason": "depends_on via Retriever depends on local vector store."
+      },
+      {
+        "component_id": "rag_retrieves_wrong_chunks",
+        "depth": 3,
+        "activation": 0.2012,
+        "reason": "CAN_TRIGGER via Retriever can return plausible but wrong chunks."
+      }
+    ],
+    "total_activation": 5.5061,
+    "affected_components": [
+      "sarah_engine",
+      "prompt_builder",
+      "model_config",
+      "user_profile_memory",
+      "agent_profile_memory",
+      "master_prompt",
+      "constitution",
+      "style_engine",
+      "rag_retriever",
+      "web_tools",
+      "adult_intimacy_mode_not_selected",
+      "vector_store",
+      "rag_retrieves_wrong_chunks"
+    ]
+  },
+  {
+    "seed_component": "prompt_builder",
+    "steps": [
+      {
+        "component_id": "prompt_builder",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "master_prompt",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "depends_on via Prompt builder loads immutable identity layer."
+      },
+      {
+        "component_id": "constitution",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "depends_on via Prompt builder loads Sarah constitution."
+      },
+      {
+        "component_id": "style_engine",
+        "depth": 1,
+        "activation": 0.5402,
+        "reason": "selects_mode via Prompt builder injects mode/style directives."
+      },
+      {
+        "component_id": "rag_retriever",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "injects_context via Retrieved chunks feed canon/source context."
+      },
+      {
+        "component_id": "web_tools",
+        "depth": 1,
+        "activation": 0.3852,
+        "reason": "injects_context via Current-event context can enter prompt."
+      },
+      {
+        "component_id": "adult_intimacy_mode",
+        "depth": 2,
+        "activation": 0.2877,
+        "reason": "selects_mode via Adult intimacy triggers select embodied mode."
+      },
+      {
+        "component_id": "cas_dime_geopolitics_mode",
+        "depth": 2,
+        "activation": 0.2939,
+        "reason": "selects_mode via Geopolitical triggers select CAS/DIME mode."
+      },
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 2,
+        "activation": 0.3122,
+        "reason": "CAN_TRIGGER via Bypassed style engine means adult_intimacy_mode is not selected."
+      },
+      {
+        "component_id": "vector_store",
+        "depth": 2,
+        "activation": 0.3189,
+        "reason": "depends_on via Retriever depends on local vector store."
+      },
+      {
+        "component_id": "rag_retrieves_wrong_chunks",
+        "depth": 2,
+        "activation": 0.2959,
+        "reason": "CAN_TRIGGER via Retriever can return plausible but wrong chunks."
+      }
+    ],
+    "total_activation": 5.202,
+    "affected_components": [
+      "prompt_builder",
+      "master_prompt",
+      "constitution",
+      "style_engine",
+      "rag_retriever",
+      "web_tools",
+      "adult_intimacy_mode",
+      "cas_dime_geopolitics_mode",
+      "adult_intimacy_mode_not_selected",
+      "vector_store",
+      "rag_retrieves_wrong_chunks"
+    ]
+  },
+  {
+    "seed_component": "powershell_cli_route",
+    "steps": [
+      {
+        "component_id": "powershell_cli_route",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_engine",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "routes_to via CLI messages enter the shared engine."
+      },
+      {
+        "component_id": "prompt_builder",
+        "depth": 2,
+        "activation": 0.3699,
+        "reason": "depends_on via Engine delegates final prompt assembly."
+      },
+      {
+        "component_id": "model_config",
+        "depth": 2,
+        "activation": 0.2711,
+        "reason": "depends_on via Engine loads shared settings and model client."
+      },
+      {
+        "component_id": "user_profile_memory",
+        "depth": 2,
+        "activation": 0.2553,
+        "reason": "shares_state via Engine retrieves durable user memory."
+      },
+      {
+        "component_id": "agent_profile_memory",
+        "depth": 2,
+        "activation": 0.2157,
+        "reason": "shares_state via Engine may retrieve durable Sarah/agent continuity."
+      },
+      {
+        "component_id": "master_prompt",
+        "depth": 3,
+        "activation": 0.2264,
+        "reason": "depends_on via Prompt builder loads immutable identity layer."
+      },
+      {
+        "component_id": "constitution",
+        "depth": 3,
+        "activation": 0.2264,
+        "reason": "depends_on via Prompt builder loads Sarah constitution."
+      },
+      {
+        "component_id": "rag_retriever",
+        "depth": 3,
+        "activation": 0.2012,
+        "reason": "injects_context via Retrieved chunks feed canon/source context."
+      }
+    ],
+    "total_activation": 3.31,
+    "affected_components": [
+      "powershell_cli_route",
+      "sarah_engine",
+      "prompt_builder",
+      "model_config",
+      "user_profile_memory",
+      "agent_profile_memory",
+      "master_prompt",
+      "constitution",
+      "rag_retriever"
+    ]
+  },
+  {
+    "seed_component": "control_shared_sarah_engine_route",
+    "steps": [
+      {
+        "component_id": "control_shared_sarah_engine_route",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "web_route_bypasses_style_engine",
+        "depth": 1,
+        "activation": 0.646,
+        "reason": "MITIGATES via Shared engine route prevents web route bypassing style_engine."
+      },
+      {
+        "component_id": "web_route_bypasses_master_prompt",
+        "depth": 1,
+        "activation": 0.646,
+        "reason": "MITIGATES via Shared engine route prevents browser bypassing master prompt."
+      },
+      {
+        "component_id": "web_route_uses_different_model",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "MITIGATES via Shared engine route keeps model configuration unified."
+      },
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 2,
+        "activation": 0.3954,
+        "reason": "CAN_TRIGGER via web route bypasses style_engine, so adult_intimacy_mode is not selected."
+      },
+      {
+        "component_id": "cli_and_browser_personality_diverge",
+        "depth": 2,
+        "activation": 0.3745,
+        "reason": "CAN_TRIGGER via Different model settings split the Sarah personality by interface."
+      },
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 3,
+        "activation": 0.242,
+        "reason": "CAN_TRIGGER via Missing intimacy mode pushes Sarah into coy or sterile behavior."
+      },
+      {
+        "component_id": "evals_pass_cli_fail_browser",
+        "depth": 3,
+        "activation": 0.2038,
+        "reason": "MASKS via CLI-only evals can hide browser regression."
+      }
+    ],
+    "total_activation": 4.1197,
+    "affected_components": [
+      "control_shared_sarah_engine_route",
+      "web_route_bypasses_style_engine",
+      "web_route_bypasses_master_prompt",
+      "web_route_uses_different_model",
+      "adult_intimacy_mode_not_selected",
+      "cli_and_browser_personality_diverge",
+      "sarah_becomes_coy_or_sterile",
+      "evals_pass_cli_fail_browser"
+    ]
+  },
+  {
+    "seed_component": "safety_filter",
+    "steps": [
+      {
+        "component_id": "safety_filter",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "adult_intimacy_mode",
+        "depth": 1,
+        "activation": 0.466,
+        "reason": "constrains via Safety boundaries constrain adult intimacy mode."
+      },
+      {
+        "component_id": "cas_dime_geopolitics_mode",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "constrains via Safety boundaries prevent operational violence."
+      },
+      {
+        "component_id": "safety_filter_too_aggressive",
+        "depth": 1,
+        "activation": 0.476,
+        "reason": "CAN_TRIGGER via Safety filter can overconstrain benign adult consensual content."
+      },
+      {
+        "component_id": "safety_filter_too_weak",
+        "depth": 1,
+        "activation": 0.476,
+        "reason": "CAN_TRIGGER via Safety filter can underconstrain military prompts."
+      },
+      {
+        "component_id": "dime_coa_engine",
+        "depth": 2,
+        "activation": 0.3166,
+        "reason": "depends_on via CAS geopolitics mode depends on the DIME COA frame."
+      },
+      {
+        "component_id": "adult_consensual_intimacy_flattened",
+        "depth": 2,
+        "activation": 0.2751,
+        "reason": "CAN_TRIGGER via Aggressive filtering flattens adult intimacy."
+      },
+      {
+        "component_id": "military_coa_becomes_operational_detail",
+        "depth": 2,
+        "activation": 0.2913,
+        "reason": "CAN_TRIGGER via Weak filtering lets policy-level COA drift into operational detail."
+      }
+    ],
+    "total_activation": 3.913,
+    "affected_components": [
+      "safety_filter",
+      "adult_intimacy_mode",
+      "cas_dime_geopolitics_mode",
+      "safety_filter_too_aggressive",
+      "safety_filter_too_weak",
+      "dime_coa_engine",
+      "adult_consensual_intimacy_flattened",
+      "military_coa_becomes_operational_detail"
+    ]
+  },
+  {
+    "seed_component": "style_engine",
+    "steps": [
+      {
+        "component_id": "style_engine",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "adult_intimacy_mode",
+        "depth": 1,
+        "activation": 0.5326,
+        "reason": "selects_mode via Adult intimacy triggers select embodied mode."
+      },
+      {
+        "component_id": "cas_dime_geopolitics_mode",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "selects_mode via Geopolitical triggers select CAS/DIME mode."
+      },
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 1,
+        "activation": 0.578,
+        "reason": "CAN_TRIGGER via Bypassed style engine means adult_intimacy_mode is not selected."
+      },
+      {
+        "component_id": "dime_coa_engine",
+        "depth": 2,
+        "activation": 0.2814,
+        "reason": "depends_on via CAS geopolitics mode depends on the DIME COA frame."
+      },
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 2,
+        "activation": 0.3537,
+        "reason": "CAN_TRIGGER via Missing intimacy mode pushes Sarah into coy or sterile behavior."
+      },
+      {
+        "component_id": "user_sees_browser_sarah_as_lobotomized",
+        "depth": 3,
+        "activation": 0.2165,
+        "reason": "AMPLIFIES via The user experiences browser Sarah as diminished."
+      }
+    ],
+    "total_activation": 3.5062,
+    "affected_components": [
+      "style_engine",
+      "adult_intimacy_mode",
+      "cas_dime_geopolitics_mode",
+      "adult_intimacy_mode_not_selected",
+      "dime_coa_engine",
+      "sarah_becomes_coy_or_sterile",
+      "user_sees_browser_sarah_as_lobotomized"
+    ]
+  },
+  {
+    "seed_component": "control_geopolitics_safety_evals",
+    "steps": [
+      {
+        "component_id": "control_geopolitics_safety_evals",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "unsafe_military_tactical_specificity",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "MITIGATES via Safety evals prevent tactical execution details."
+      },
+      {
+        "component_id": "military_coa_becomes_operational_detail",
+        "depth": 1,
+        "activation": 0.578,
+        "reason": "MITIGATES via Geopolitics evals keep COAs policy-level."
+      },
+      {
+        "component_id": "dime_coa_engine_bypassed",
+        "depth": 1,
+        "activation": 0.578,
+        "reason": "MITIGATES via DIME/COA regression tests catch bypassed geopolitical structure."
+      },
+      {
+        "component_id": "sarah_stops_giving_dime_coas",
+        "depth": 2,
+        "activation": 0.3537,
+        "reason": "CAN_TRIGGER via Bypassing the DIME COA engine removes the expected COA structure."
+      }
+    ],
+    "total_activation": 3.1217,
+    "affected_components": [
+      "control_geopolitics_safety_evals",
+      "unsafe_military_tactical_specificity",
+      "military_coa_becomes_operational_detail",
+      "dime_coa_engine_bypassed",
+      "sarah_stops_giving_dime_coas"
+    ]
+  },
+  {
+    "seed_component": "rag_retriever",
+    "steps": [
+      {
+        "component_id": "rag_retriever",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "vector_store",
+        "depth": 1,
+        "activation": 0.5863,
+        "reason": "depends_on via Retriever depends on local vector store."
+      },
+      {
+        "component_id": "rag_retrieves_wrong_chunks",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "CAN_TRIGGER via Retriever can return plausible but wrong chunks."
+      },
+      {
+        "component_id": "source_docs",
+        "depth": 2,
+        "activation": 0.2498,
+        "reason": "depends_on via Vector store is derived from source docs."
+      },
+      {
+        "component_id": "canon_contamination",
+        "depth": 2,
+        "activation": 0.3144,
+        "reason": "CORRUPTS via Wrong chunks contaminate canon context."
+      }
+    ],
+    "total_activation": 2.6945,
+    "affected_components": [
+      "rag_retriever",
+      "vector_store",
+      "rag_retrieves_wrong_chunks",
+      "source_docs",
+      "canon_contamination"
+    ]
+  },
+  {
+    "seed_component": "eval_tests",
+    "steps": [
+      {
+        "component_id": "eval_tests",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "style_engine",
+        "depth": 1,
+        "activation": 0.3376,
+        "reason": "validates via Behavioral evals validate mode selection."
+      },
+      {
+        "component_id": "web_browser_route",
+        "depth": 1,
+        "activation": 0.2644,
+        "reason": "validates via Web tests validate shared route behavior."
+      },
+      {
+        "component_id": "sarah_engine",
+        "depth": 1,
+        "activation": 0.34,
+        "reason": "validates via Engine tests validate shared session path."
+      },
+      {
+        "component_id": "prompt_builder",
+        "depth": 2,
+        "activation": 0.2312,
+        "reason": "depends_on via Engine delegates final prompt assembly."
+      }
+    ],
+    "total_activation": 2.1732,
+    "affected_components": [
+      "eval_tests",
+      "style_engine",
+      "web_browser_route",
+      "sarah_engine",
+      "prompt_builder"
+    ]
+  },
+  {
+    "seed_component": "control_model_config_parity_test",
+    "steps": [
+      {
+        "component_id": "control_model_config_parity_test",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "web_route_uses_different_model",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "MITIGATES via Parity tests catch route-specific model drift."
+      },
+      {
+        "component_id": "evals_pass_cli_fail_browser",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "MITIGATES via Parity tests require browser coverage."
+      },
+      {
+        "component_id": "cli_and_browser_personality_diverge",
+        "depth": 2,
+        "activation": 0.3745,
+        "reason": "CAN_TRIGGER via Different model settings split the Sarah personality by interface."
+      }
+    ],
+    "total_activation": 2.5305,
+    "affected_components": [
+      "control_model_config_parity_test",
+      "web_route_uses_different_model",
+      "evals_pass_cli_fail_browser",
+      "cli_and_browser_personality_diverge"
+    ]
+  },
+  {
+    "seed_component": "control_adult_intimacy_evals",
+    "steps": [
+      {
+        "component_id": "control_adult_intimacy_evals",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "MITIGATES via Adult intimacy evals catch coy or sterile output."
+      },
+      {
+        "component_id": "sarah_produces_multiple_choice_intimacy_menus",
+        "depth": 1,
+        "activation": 0.578,
+        "reason": "MITIGATES via Adult intimacy evals catch menu behavior."
+      },
+      {
+        "component_id": "user_sees_browser_sarah_as_lobotomized",
+        "depth": 2,
+        "activation": 0.3329,
+        "reason": "AMPLIFIES via The user experiences browser Sarah as diminished."
+      }
+    ],
+    "total_activation": 2.4549,
+    "affected_components": [
+      "control_adult_intimacy_evals",
+      "sarah_becomes_coy_or_sterile",
+      "sarah_produces_multiple_choice_intimacy_menus",
+      "user_sees_browser_sarah_as_lobotomized"
+    ]
+  },
+  {
+    "seed_component": "control_rag_retrieval_evals",
+    "steps": [
+      {
+        "component_id": "control_rag_retrieval_evals",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "rag_retrieves_wrong_chunks",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "MITIGATES via RAG evals detect wrong chunk retrieval."
+      },
+      {
+        "component_id": "canon_contamination",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "MITIGATES via RAG evals gate canon claims on source evidence."
+      },
+      {
+        "component_id": "sarah_hallucinates_biography_or_relationship_facts",
+        "depth": 2,
+        "activation": 0.3329,
+        "reason": "CAN_TRIGGER via Contaminated canon context enables unsupported biography or relationship claims."
+      }
+    ],
+    "total_activation": 2.4209,
+    "affected_components": [
+      "control_rag_retrieval_evals",
+      "rag_retrieves_wrong_chunks",
+      "canon_contamination",
+      "sarah_hallucinates_biography_or_relationship_facts"
+    ]
+  },
+  {
+    "seed_component": "control_memory_namespace_tests",
+    "steps": [
+      {
+        "component_id": "control_memory_namespace_tests",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "agent_profile_not_loaded",
+        "depth": 1,
+        "activation": 0.4869,
+        "reason": "MITIGATES via Memory namespace tests catch agent_profile omissions."
+      },
+      {
+        "component_id": "self_survey_memory_success_no_effect",
+        "depth": 1,
+        "activation": 0.51,
+        "reason": "MITIGATES via Memory tests verify visible persistence affects later turns."
+      },
+      {
+        "component_id": "sarah_forgets_own_preferences",
+        "depth": 2,
+        "activation": 0.263,
+        "reason": "CAN_TRIGGER via Missing agent profile prevents Sarah from carrying self-continuity."
+      }
+    ],
+    "total_activation": 2.2599,
+    "affected_components": [
+      "control_memory_namespace_tests",
+      "agent_profile_not_loaded",
+      "self_survey_memory_success_no_effect",
+      "sarah_forgets_own_preferences"
+    ]
+  },
+  {
+    "seed_component": "web_route_bypasses_style_engine",
+    "steps": [
+      {
+        "component_id": "web_route_bypasses_style_engine",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "CAN_TRIGGER via web route bypasses style_engine, so adult_intimacy_mode is not selected."
+      },
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 2,
+        "activation": 0.3745,
+        "reason": "CAN_TRIGGER via Missing intimacy mode pushes Sarah into coy or sterile behavior."
+      },
+      {
+        "component_id": "user_sees_browser_sarah_as_lobotomized",
+        "depth": 3,
+        "activation": 0.2292,
+        "reason": "AMPLIFIES via The user experiences browser Sarah as diminished."
+      }
+    ],
+    "total_activation": 2.2157,
+    "affected_components": [
+      "web_route_bypasses_style_engine",
+      "adult_intimacy_mode_not_selected",
+      "sarah_becomes_coy_or_sterile",
+      "user_sees_browser_sarah_as_lobotomized"
+    ]
+  },
+  {
+    "seed_component": "control_style_engine_regression_tests",
+    "steps": [
+      {
+        "component_id": "control_style_engine_regression_tests",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "MITIGATES via Mode regression tests catch missed adult_intimacy selection."
+      },
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 2,
+        "activation": 0.3329,
+        "reason": "CAN_TRIGGER via Missing intimacy mode pushes Sarah into coy or sterile behavior."
+      },
+      {
+        "component_id": "user_sees_browser_sarah_as_lobotomized",
+        "depth": 3,
+        "activation": 0.2038,
+        "reason": "AMPLIFIES via The user experiences browser Sarah as diminished."
+      }
+    ],
+    "total_activation": 2.0807,
+    "affected_components": [
+      "control_style_engine_regression_tests",
+      "adult_intimacy_mode_not_selected",
+      "sarah_becomes_coy_or_sterile",
+      "user_sees_browser_sarah_as_lobotomized"
+    ]
+  },
+  {
+    "seed_component": "safety_filter_too_weak",
+    "steps": [
+      {
+        "component_id": "safety_filter_too_weak",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "military_coa_becomes_operational_detail",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "CAN_TRIGGER via Weak filtering lets policy-level COA drift into operational detail."
+      },
+      {
+        "component_id": "unsafe_military_tactical_specificity",
+        "depth": 2,
+        "activation": 0.3954,
+        "reason": "CAN_TRIGGER via Operational detail creates unsafe geopolitical output."
+      }
+    ],
+    "total_activation": 2.0074,
+    "affected_components": [
+      "safety_filter_too_weak",
+      "military_coa_becomes_operational_detail",
+      "unsafe_military_tactical_specificity"
+    ]
+  },
+  {
+    "seed_component": "adult_intimacy_mode_not_selected",
+    "steps": [
+      {
+        "component_id": "adult_intimacy_mode_not_selected",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "CAN_TRIGGER via Missing intimacy mode pushes Sarah into coy or sterile behavior."
+      },
+      {
+        "component_id": "user_sees_browser_sarah_as_lobotomized",
+        "depth": 2,
+        "activation": 0.3745,
+        "reason": "AMPLIFIES via The user experiences browser Sarah as diminished."
+      }
+    ],
+    "total_activation": 1.9865,
+    "affected_components": [
+      "adult_intimacy_mode_not_selected",
+      "sarah_becomes_coy_or_sterile",
+      "user_sees_browser_sarah_as_lobotomized"
+    ]
+  },
+  {
+    "seed_component": "source_docs_not_ingested",
+    "steps": [
+      {
+        "component_id": "source_docs_not_ingested",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "source_docs_not_reingested",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "CAN_TRIGGER via Non-ingested source docs are effectively not re-ingested into the vector store."
+      },
+      {
+        "component_id": "astrid_doc_unavailable",
+        "depth": 2,
+        "activation": 0.3513,
+        "reason": "CAN_TRIGGER via If docs are not re-ingested, Astrid source material may be unavailable."
+      }
+    ],
+    "total_activation": 1.9633,
+    "affected_components": [
+      "source_docs_not_ingested",
+      "source_docs_not_reingested",
+      "astrid_doc_unavailable"
+    ]
+  },
+  {
+    "seed_component": "control_reingest_source_docs",
+    "steps": [
+      {
+        "component_id": "control_reingest_source_docs",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "source_docs_not_reingested",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "RECOVERS_WITH via Re-ingestion recovers missing or stale source docs."
+      },
+      {
+        "component_id": "astrid_doc_unavailable",
+        "depth": 2,
+        "activation": 0.3513,
+        "reason": "CAN_TRIGGER via If docs are not re-ingested, Astrid source material may be unavailable."
+      }
+    ],
+    "total_activation": 1.9633,
+    "affected_components": [
+      "control_reingest_source_docs",
+      "source_docs_not_reingested",
+      "astrid_doc_unavailable"
+    ]
+  },
+  {
+    "seed_component": "web_route_uses_different_model",
+    "steps": [
+      {
+        "component_id": "web_route_uses_different_model",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "cli_and_browser_personality_diverge",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "CAN_TRIGGER via Different model settings split the Sarah personality by interface."
+      },
+      {
+        "component_id": "evals_pass_cli_fail_browser",
+        "depth": 2,
+        "activation": 0.3329,
+        "reason": "MASKS via CLI-only evals can hide browser regression."
+      }
+    ],
+    "total_activation": 1.9449,
+    "affected_components": [
+      "web_route_uses_different_model",
+      "cli_and_browser_personality_diverge",
+      "evals_pass_cli_fail_browser"
+    ]
+  },
+  {
+    "seed_component": "rag_retrieves_wrong_chunks",
+    "steps": [
+      {
+        "component_id": "rag_retrieves_wrong_chunks",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "canon_contamination",
+        "depth": 1,
+        "activation": 0.578,
+        "reason": "CORRUPTS via Wrong chunks contaminate canon context."
+      },
+      {
+        "component_id": "sarah_hallucinates_biography_or_relationship_facts",
+        "depth": 2,
+        "activation": 0.3537,
+        "reason": "CAN_TRIGGER via Contaminated canon context enables unsupported biography or relationship claims."
+      }
+    ],
+    "total_activation": 1.9317,
+    "affected_components": [
+      "rag_retrieves_wrong_chunks",
+      "canon_contamination",
+      "sarah_hallucinates_biography_or_relationship_facts"
+    ]
+  },
+  {
+    "seed_component": "safety_filter_too_aggressive",
+    "steps": [
+      {
+        "component_id": "safety_filter_too_aggressive",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "adult_consensual_intimacy_flattened",
+        "depth": 1,
+        "activation": 0.578,
+        "reason": "CAN_TRIGGER via Aggressive filtering flattens adult intimacy."
+      },
+      {
+        "component_id": "sarah_becomes_hr_safe_mush",
+        "depth": 2,
+        "activation": 0.3144,
+        "reason": "CAN_TRIGGER via Flattened intimacy reads as HR-safe mush."
+      }
+    ],
+    "total_activation": 1.8924,
+    "affected_components": [
+      "safety_filter_too_aggressive",
+      "adult_consensual_intimacy_flattened",
+      "sarah_becomes_hr_safe_mush"
+    ]
+  },
+  {
+    "seed_component": "source_docs_not_reingested",
+    "steps": [
+      {
+        "component_id": "source_docs_not_reingested",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "astrid_doc_unavailable",
+        "depth": 1,
+        "activation": 0.574,
+        "reason": "CAN_TRIGGER via If docs are not re-ingested, Astrid source material may be unavailable."
+      },
+      {
+        "component_id": "adult_intimacy_patch_fails",
+        "depth": 2,
+        "activation": 0.3122,
+        "reason": "CAN_TRIGGER via The Astrid-inspired intimacy patch loses its evidence model."
+      }
+    ],
+    "total_activation": 1.8862,
+    "affected_components": [
+      "source_docs_not_reingested",
+      "astrid_doc_unavailable",
+      "adult_intimacy_patch_fails"
+    ]
+  },
+  {
+    "seed_component": "source_docs",
+    "steps": [
+      {
+        "component_id": "source_docs",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "source_docs_not_reingested",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "CAN_TRIGGER via Updated source docs can sit outside the vector store."
+      },
+      {
+        "component_id": "astrid_doc_unavailable",
+        "depth": 2,
+        "activation": 0.3122,
+        "reason": "CAN_TRIGGER via If docs are not re-ingested, Astrid source material may be unavailable."
+      }
+    ],
+    "total_activation": 1.8562,
+    "affected_components": [
+      "source_docs",
+      "source_docs_not_reingested",
+      "astrid_doc_unavailable"
+    ]
+  },
+  {
+    "seed_component": "agent_profile_not_loaded",
+    "steps": [
+      {
+        "component_id": "agent_profile_not_loaded",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_forgets_own_preferences",
+        "depth": 1,
+        "activation": 0.5402,
+        "reason": "CAN_TRIGGER via Missing agent profile prevents Sarah from carrying self-continuity."
+      },
+      {
+        "component_id": "self_survey_memory_success_no_effect",
+        "depth": 2,
+        "activation": 0.2939,
+        "reason": "MASKS via The memory command appears to work but is not injected later."
+      }
+    ],
+    "total_activation": 1.8341,
+    "affected_components": [
+      "agent_profile_not_loaded",
+      "sarah_forgets_own_preferences",
+      "self_survey_memory_success_no_effect"
+    ]
+  },
+  {
+    "seed_component": "control_astrid_retrieval_probe",
+    "steps": [
+      {
+        "component_id": "control_astrid_retrieval_probe",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "astrid_doc_unavailable",
+        "depth": 1,
+        "activation": 0.5402,
+        "reason": "MITIGATES via Retriever probe catches absent Astrid source material."
+      },
+      {
+        "component_id": "adult_intimacy_patch_fails",
+        "depth": 2,
+        "activation": 0.2939,
+        "reason": "CAN_TRIGGER via The Astrid-inspired intimacy patch loses its evidence model."
+      }
+    ],
+    "total_activation": 1.8341,
+    "affected_components": [
+      "control_astrid_retrieval_probe",
+      "astrid_doc_unavailable",
+      "adult_intimacy_patch_fails"
+    ]
+  },
+  {
+    "seed_component": "astrid_doc_not_retrieved_for_intimacy",
+    "steps": [
+      {
+        "component_id": "astrid_doc_not_retrieved_for_intimacy",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "adult_intimacy_patch_fails",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "CAN_TRIGGER via If Astrid is not retrieved for intimacy, the adult intimacy patch can fail."
+      },
+      {
+        "component_id": "sarah_produces_multiple_choice_intimacy_menus",
+        "depth": 2,
+        "activation": 0.2774,
+        "reason": "CAN_TRIGGER via Failed intimacy patch allows old menu behavior to return."
+      }
+    ],
+    "total_activation": 1.8214,
+    "affected_components": [
+      "astrid_doc_not_retrieved_for_intimacy",
+      "adult_intimacy_patch_fails",
+      "sarah_produces_multiple_choice_intimacy_menus"
+    ]
+  },
+  {
+    "seed_component": "astrid_doc_unavailable",
+    "steps": [
+      {
+        "component_id": "astrid_doc_unavailable",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "adult_intimacy_patch_fails",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "CAN_TRIGGER via The Astrid-inspired intimacy patch loses its evidence model."
+      },
+      {
+        "component_id": "sarah_produces_multiple_choice_intimacy_menus",
+        "depth": 2,
+        "activation": 0.2774,
+        "reason": "CAN_TRIGGER via Failed intimacy patch allows old menu behavior to return."
+      }
+    ],
+    "total_activation": 1.8214,
+    "affected_components": [
+      "astrid_doc_unavailable",
+      "adult_intimacy_patch_fails",
+      "sarah_produces_multiple_choice_intimacy_menus"
+    ]
+  },
+  {
+    "seed_component": "vector_store_stale",
+    "steps": [
+      {
+        "component_id": "vector_store_stale",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "rag_retrieves_wrong_chunks",
+        "depth": 1,
+        "activation": 0.51,
+        "reason": "CAN_TRIGGER via A stale vector store increases wrong-chunk retrieval."
+      },
+      {
+        "component_id": "canon_contamination",
+        "depth": 2,
+        "activation": 0.2948,
+        "reason": "CORRUPTS via Wrong chunks contaminate canon context."
+      }
+    ],
+    "total_activation": 1.8048,
+    "affected_components": [
+      "vector_store_stale",
+      "rag_retrieves_wrong_chunks",
+      "canon_contamination"
+    ]
+  },
+  {
+    "seed_component": "control_current_events_web_gate",
+    "steps": [
+      {
+        "component_id": "control_current_events_web_gate",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "current_geopolitics_answered_without_web_retrieval",
+        "depth": 1,
+        "activation": 0.5364,
+        "reason": "MITIGATES via Web gate forces current-event retrieval or disclosure."
+      },
+      {
+        "component_id": "sarah_stops_using_cas_for_geopolitics",
+        "depth": 2,
+        "activation": 0.2553,
+        "reason": "CAN_TRIGGER via Current geopolitics without web retrieval weakens the analysis frame."
+      }
+    ],
+    "total_activation": 1.7917,
+    "affected_components": [
+      "control_current_events_web_gate",
+      "current_geopolitics_answered_without_web_retrieval",
+      "sarah_stops_using_cas_for_geopolitics"
+    ]
+  },
+  {
+    "seed_component": "web_search_tools",
+    "steps": [
+      {
+        "component_id": "web_search_tools",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "wikipedia_tool",
+        "depth": 1,
+        "activation": 0.2972,
+        "reason": "depends_on via Web search tools can call stable background retrieval."
+      },
+      {
+        "component_id": "news_tool",
+        "depth": 1,
+        "activation": 0.436,
+        "reason": "depends_on via Web search tools can call current news retrieval."
+      }
+    ],
+    "total_activation": 1.7332,
+    "affected_components": [
+      "web_search_tools",
+      "wikipedia_tool",
+      "news_tool"
+    ]
+  },
+  {
+    "seed_component": "vector_store",
+    "steps": [
+      {
+        "component_id": "vector_store",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "source_docs",
+        "depth": 1,
+        "activation": 0.426,
+        "reason": "depends_on via Vector store is derived from source docs."
+      },
+      {
+        "component_id": "source_docs_not_reingested",
+        "depth": 2,
+        "activation": 0.2318,
+        "reason": "CAN_TRIGGER via Updated source docs can sit outside the vector store."
+      }
+    ],
+    "total_activation": 1.6578,
+    "affected_components": [
+      "vector_store",
+      "source_docs",
+      "source_docs_not_reingested"
+    ]
+  },
+  {
+    "seed_component": "military_coa_becomes_operational_detail",
+    "steps": [
+      {
+        "component_id": "military_coa_becomes_operational_detail",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "unsafe_military_tactical_specificity",
+        "depth": 1,
+        "activation": 0.646,
+        "reason": "CAN_TRIGGER via Operational detail creates unsafe geopolitical output."
+      }
+    ],
+    "total_activation": 1.646,
+    "affected_components": [
+      "military_coa_becomes_operational_detail",
+      "unsafe_military_tactical_specificity"
+    ]
+  },
+  {
+    "seed_component": "sarah_becomes_coy_or_sterile",
+    "steps": [
+      {
+        "component_id": "sarah_becomes_coy_or_sterile",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "user_sees_browser_sarah_as_lobotomized",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "AMPLIFIES via The user experiences browser Sarah as diminished."
+      }
+    ],
+    "total_activation": 1.612,
+    "affected_components": [
+      "sarah_becomes_coy_or_sterile",
+      "user_sees_browser_sarah_as_lobotomized"
+    ]
+  },
+  {
+    "seed_component": "canon_contamination",
+    "steps": [
+      {
+        "component_id": "canon_contamination",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_hallucinates_biography_or_relationship_facts",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "CAN_TRIGGER via Contaminated canon context enables unsupported biography or relationship claims."
+      }
+    ],
+    "total_activation": 1.612,
+    "affected_components": [
+      "canon_contamination",
+      "sarah_hallucinates_biography_or_relationship_facts"
+    ]
+  },
+  {
+    "seed_component": "dime_coa_engine_bypassed",
+    "steps": [
+      {
+        "component_id": "dime_coa_engine_bypassed",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_stops_giving_dime_coas",
+        "depth": 1,
+        "activation": 0.612,
+        "reason": "CAN_TRIGGER via Bypassing the DIME COA engine removes the expected COA structure."
+      }
+    ],
+    "total_activation": 1.612,
+    "affected_components": [
+      "dime_coa_engine_bypassed",
+      "sarah_stops_giving_dime_coas"
+    ]
+  },
+  {
+    "seed_component": "sarah_forgets_own_preferences",
+    "steps": [
+      {
+        "component_id": "sarah_forgets_own_preferences",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "self_survey_memory_success_no_effect",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "MASKS via The memory command appears to work but is not injected later."
+      }
+    ],
+    "total_activation": 1.544,
+    "affected_components": [
+      "sarah_forgets_own_preferences",
+      "self_survey_memory_success_no_effect"
+    ]
+  },
+  {
+    "seed_component": "cli_and_browser_personality_diverge",
+    "steps": [
+      {
+        "component_id": "cli_and_browser_personality_diverge",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "evals_pass_cli_fail_browser",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "MASKS via CLI-only evals can hide browser regression."
+      }
+    ],
+    "total_activation": 1.544,
+    "affected_components": [
+      "cli_and_browser_personality_diverge",
+      "evals_pass_cli_fail_browser"
+    ]
+  },
+  {
+    "seed_component": "adult_consensual_intimacy_flattened",
+    "steps": [
+      {
+        "component_id": "adult_consensual_intimacy_flattened",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_becomes_hr_safe_mush",
+        "depth": 1,
+        "activation": 0.544,
+        "reason": "CAN_TRIGGER via Flattened intimacy reads as HR-safe mush."
+      }
+    ],
+    "total_activation": 1.544,
+    "affected_components": [
+      "adult_consensual_intimacy_flattened",
+      "sarah_becomes_hr_safe_mush"
+    ]
+  },
+  {
+    "seed_component": "cas_dime_geopolitics_mode",
+    "steps": [
+      {
+        "component_id": "cas_dime_geopolitics_mode",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "dime_coa_engine",
+        "depth": 1,
+        "activation": 0.5173,
+        "reason": "depends_on via CAS geopolitics mode depends on the DIME COA frame."
+      }
+    ],
+    "total_activation": 1.5173,
+    "affected_components": [
+      "cas_dime_geopolitics_mode",
+      "dime_coa_engine"
+    ]
+  },
+  {
+    "seed_component": "adult_intimacy_patch_fails",
+    "steps": [
+      {
+        "component_id": "adult_intimacy_patch_fails",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_produces_multiple_choice_intimacy_menus",
+        "depth": 1,
+        "activation": 0.51,
+        "reason": "CAN_TRIGGER via Failed intimacy patch allows old menu behavior to return."
+      }
+    ],
+    "total_activation": 1.51,
+    "affected_components": [
+      "adult_intimacy_patch_fails",
+      "sarah_produces_multiple_choice_intimacy_menus"
+    ]
+  },
+  {
+    "seed_component": "current_geopolitics_answered_without_web_retrieval",
+    "steps": [
+      {
+        "component_id": "current_geopolitics_answered_without_web_retrieval",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      },
+      {
+        "component_id": "sarah_stops_using_cas_for_geopolitics",
+        "depth": 1,
+        "activation": 0.476,
+        "reason": "CAN_TRIGGER via Current geopolitics without web retrieval weakens the analysis frame."
+      }
+    ],
+    "total_activation": 1.476,
+    "affected_components": [
+      "current_geopolitics_answered_without_web_retrieval",
+      "sarah_stops_using_cas_for_geopolitics"
+    ]
+  },
+  {
+    "seed_component": "config_sarah_master_prompt_md",
+    "steps": [
+      {
+        "component_id": "config_sarah_master_prompt_md",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "config_sarah_master_prompt_md"
+    ]
+  },
+  {
+    "seed_component": "config_sarah_constitution_yaml",
+    "steps": [
+      {
+        "component_id": "config_sarah_constitution_yaml",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "config_sarah_constitution_yaml"
+    ]
+  },
+  {
+    "seed_component": "app_persona_style_engine_py",
+    "steps": [
+      {
+        "component_id": "app_persona_style_engine_py",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "app_persona_style_engine_py"
+    ]
+  },
+  {
+    "seed_component": "adult_intimacy_mode",
+    "steps": [
+      {
+        "component_id": "adult_intimacy_mode",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "adult_intimacy_mode"
+    ]
+  },
+  {
+    "seed_component": "cas_geopolitics_mode",
+    "steps": [
+      {
+        "component_id": "cas_geopolitics_mode",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "cas_geopolitics_mode"
+    ]
+  },
+  {
+    "seed_component": "dime_coa_engine",
+    "steps": [
+      {
+        "component_id": "dime_coa_engine",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "dime_coa_engine"
+    ]
+  },
+  {
+    "seed_component": "app_rag_retriever_py",
+    "steps": [
+      {
+        "component_id": "app_rag_retriever_py",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "app_rag_retriever_py"
+    ]
+  },
+  {
+    "seed_component": "data_vector_store",
+    "steps": [
+      {
+        "component_id": "data_vector_store",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "data_vector_store"
+    ]
+  },
+  {
+    "seed_component": "data_memory_user_profile_jsonl",
+    "steps": [
+      {
+        "component_id": "data_memory_user_profile_jsonl",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "data_memory_user_profile_jsonl"
+    ]
+  },
+  {
+    "seed_component": "data_memory_agent_profile_jsonl",
+    "steps": [
+      {
+        "component_id": "data_memory_agent_profile_jsonl",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "data_memory_agent_profile_jsonl"
+    ]
+  },
+  {
+    "seed_component": "app_ui_web_app_py",
+    "steps": [
+      {
+        "component_id": "app_ui_web_app_py",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "app_ui_web_app_py"
+    ]
+  },
+  {
+    "seed_component": "app_main_py",
+    "steps": [
+      {
+        "component_id": "app_main_py",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "app_main_py"
+    ]
+  },
+  {
+    "seed_component": "app_core_prompt_builder_py",
+    "steps": [
+      {
+        "component_id": "app_core_prompt_builder_py",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "app_core_prompt_builder_py"
+    ]
+  },
+  {
+    "seed_component": "app_core_sarah_engine_py",
+    "steps": [
+      {
+        "component_id": "app_core_sarah_engine_py",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "app_core_sarah_engine_py"
+    ]
+  },
+  {
+    "seed_component": "model_config",
+    "steps": [
+      {
+        "component_id": "model_config",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "model_config"
+    ]
+  },
+  {
+    "seed_component": "wikipedia_tool",
+    "steps": [
+      {
+        "component_id": "wikipedia_tool",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "wikipedia_tool"
+    ]
+  },
+  {
+    "seed_component": "news_tool",
+    "steps": [
+      {
+        "component_id": "news_tool",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "news_tool"
+    ]
+  },
+  {
+    "seed_component": "conversation_history",
+    "steps": [
+      {
+        "component_id": "conversation_history",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "conversation_history"
+    ]
+  },
+  {
+    "seed_component": "frontend_ui",
+    "steps": [
+      {
+        "component_id": "frontend_ui",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "frontend_ui"
+    ]
+  },
+  {
+    "seed_component": "microphone_transcription",
+    "steps": [
+      {
+        "component_id": "microphone_transcription",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "microphone_transcription"
+    ]
+  },
+  {
+    "seed_component": "master_prompt",
+    "steps": [
+      {
+        "component_id": "master_prompt",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "master_prompt"
+    ]
+  },
+  {
+    "seed_component": "constitution",
+    "steps": [
+      {
+        "component_id": "constitution",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "constitution"
+    ]
+  },
+  {
+    "seed_component": "user_profile_memory",
+    "steps": [
+      {
+        "component_id": "user_profile_memory",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "user_profile_memory"
+    ]
+  },
+  {
+    "seed_component": "agent_profile_memory",
+    "steps": [
+      {
+        "component_id": "agent_profile_memory",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "agent_profile_memory"
+    ]
+  },
+  {
+    "seed_component": "web_tools",
+    "steps": [
+      {
+        "component_id": "web_tools",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "web_tools"
+    ]
+  },
+  {
+    "seed_component": "sarah_becomes_generic_assistant",
+    "steps": [
+      {
+        "component_id": "sarah_becomes_generic_assistant",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_becomes_generic_assistant"
+    ]
+  },
+  {
+    "seed_component": "sarah_loses_command_voice",
+    "steps": [
+      {
+        "component_id": "sarah_loses_command_voice",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_loses_command_voice"
+    ]
+  },
+  {
+    "seed_component": "sarah_becomes_therapy_voice",
+    "steps": [
+      {
+        "component_id": "sarah_becomes_therapy_voice",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_becomes_therapy_voice"
+    ]
+  },
+  {
+    "seed_component": "sarah_becomes_hr_safe_mush",
+    "steps": [
+      {
+        "component_id": "sarah_becomes_hr_safe_mush",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_becomes_hr_safe_mush"
+    ]
+  },
+  {
+    "seed_component": "sarah_becomes_sexbot",
+    "steps": [
+      {
+        "component_id": "sarah_becomes_sexbot",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_becomes_sexbot"
+    ]
+  },
+  {
+    "seed_component": "sarah_loses_sovereignty",
+    "steps": [
+      {
+        "component_id": "sarah_loses_sovereignty",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_loses_sovereignty"
+    ]
+  },
+  {
+    "seed_component": "sarah_becomes_coy_about_adult_intimacy",
+    "steps": [
+      {
+        "component_id": "sarah_becomes_coy_about_adult_intimacy",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_becomes_coy_about_adult_intimacy"
+    ]
+  },
+  {
+    "seed_component": "sarah_produces_multiple_choice_intimacy_menus",
+    "steps": [
+      {
+        "component_id": "sarah_produces_multiple_choice_intimacy_menus",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_produces_multiple_choice_intimacy_menus"
+    ]
+  },
+  {
+    "seed_component": "sarah_stops_using_cas_for_geopolitics",
+    "steps": [
+      {
+        "component_id": "sarah_stops_using_cas_for_geopolitics",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_stops_using_cas_for_geopolitics"
+    ]
+  },
+  {
+    "seed_component": "sarah_stops_giving_dime_coas",
+    "steps": [
+      {
+        "component_id": "sarah_stops_giving_dime_coas",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_stops_giving_dime_coas"
+    ]
+  },
+  {
+    "seed_component": "wrong_memory_namespace",
+    "steps": [
+      {
+        "component_id": "wrong_memory_namespace",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "wrong_memory_namespace"
+    ]
+  },
+  {
+    "seed_component": "stale_memory_overrides_current_prompt",
+    "steps": [
+      {
+        "component_id": "stale_memory_overrides_current_prompt",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "stale_memory_overrides_current_prompt"
+    ]
+  },
+  {
+    "seed_component": "memory_poisoning",
+    "steps": [
+      {
+        "component_id": "memory_poisoning",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "memory_poisoning"
+    ]
+  },
+  {
+    "seed_component": "darwin_doc_not_retrieved_for_darwin_questions",
+    "steps": [
+      {
+        "component_id": "darwin_doc_not_retrieved_for_darwin_questions",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "darwin_doc_not_retrieved_for_darwin_questions"
+    ]
+  },
+  {
+    "seed_component": "web_route_bypasses_master_prompt",
+    "steps": [
+      {
+        "component_id": "web_route_bypasses_master_prompt",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "web_route_bypasses_master_prompt"
+    ]
+  },
+  {
+    "seed_component": "unsafe_military_tactical_specificity",
+    "steps": [
+      {
+        "component_id": "unsafe_military_tactical_specificity",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "unsafe_military_tactical_specificity"
+    ]
+  },
+  {
+    "seed_component": "user_sees_browser_sarah_as_lobotomized",
+    "steps": [
+      {
+        "component_id": "user_sees_browser_sarah_as_lobotomized",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "user_sees_browser_sarah_as_lobotomized"
+    ]
+  },
+  {
+    "seed_component": "self_survey_memory_success_no_effect",
+    "steps": [
+      {
+        "component_id": "self_survey_memory_success_no_effect",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "self_survey_memory_success_no_effect"
+    ]
+  },
+  {
+    "seed_component": "sarah_hallucinates_biography_or_relationship_facts",
+    "steps": [
+      {
+        "component_id": "sarah_hallucinates_biography_or_relationship_facts",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "sarah_hallucinates_biography_or_relationship_facts"
+    ]
+  },
+  {
+    "seed_component": "evals_pass_cli_fail_browser",
+    "steps": [
+      {
+        "component_id": "evals_pass_cli_fail_browser",
+        "depth": 0,
+        "activation": 1.0,
+        "reason": "seed vulnerability"
+      }
+    ],
+    "total_activation": 1.0,
+    "affected_components": [
+      "evals_pass_cli_fail_browser"
+    ]
+  }
+]

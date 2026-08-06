@@ -1,0 +1,84 @@
+{
+  "conversation_id": "9c3566925f404b658a5672df9261f07a",
+  "command_type": "crew",
+  "use_alex_proxy": false,
+  "topic": "Discuss wartime coalition strategy.",
+  "agents": [
+    "Churchill",
+    "FDR"
+  ],
+  "first_speaker": "Churchill",
+  "turn_order": [
+    "Churchill",
+    "FDR"
+  ],
+  "planned_turn_order": [
+    "Churchill",
+    "FDR",
+    "Churchill",
+    "FDR"
+  ],
+  "route_handler_used": "crew",
+  "parsed_rounds": 2,
+  "parsed_max_words": null,
+  "number_of_agents": 2,
+  "total_agent_turns": 4,
+  "joint_verdict_requested": false,
+  "allow_partial": false,
+  "rounds_requested": 2,
+  "rounds_run": 2,
+  "max_chars_per_turn": 6000,
+  "total_turns": 4,
+  "crew_style": {
+    "max_words_per_turn": null,
+    "total_turns": null,
+    "mode": "standard",
+    "allow_bullets": true,
+    "allow_reports": false,
+    "display_mode": "full",
+    "allow_synthesis": false,
+    "perrow_explicitly_requested": false,
+    "parsed_rounds": null,
+    "joint_verdict_requested": false,
+    "joint_verdict_max_words": 80
+  },
+  "turns": [
+    {
+      "round_number": 1,
+      "speaker": "Churchill",
+      "recipient": "FDR",
+      "message": "Churchill replies to Alex.",
+      "forwarded_message": "Churchill replies to Alex.",
+      "timestamp": "2026-06-30T03:26:45.418383+00:00"
+    },
+    {
+      "round_number": 1,
+      "speaker": "FDR",
+      "recipient": "Churchill",
+      "message": "FDR replies to Churchill.",
+      "forwarded_message": "FDR replies to Churchill.",
+      "timestamp": "2026-06-30T03:26:45.418985+00:00"
+    },
+    {
+      "round_number": 2,
+      "speaker": "Churchill",
+      "recipient": "FDR",
+      "message": "Churchill replies to FDR.",
+      "forwarded_message": "Churchill replies to FDR.",
+      "timestamp": "2026-06-30T03:26:45.419466+00:00"
+    },
+    {
+      "round_number": 2,
+      "speaker": "FDR",
+      "recipient": "Churchill",
+      "message": "FDR replies to Churchill.",
+      "forwarded_message": "FDR replies to Churchill.",
+      "timestamp": "2026-06-30T03:26:45.419904+00:00"
+    }
+  ],
+  "synthesis": null,
+  "joint_verdict_for_alex": null,
+  "transcript_markdown_path": "C:\\Users\\AlexA\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_fdr_churchill_bus\\transcripts\\9c3566925f404b658a5672df9261f07a.md",
+  "transcript_json_path": "C:\\Users\\AlexA\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_fdr_churchill_bus\\transcripts\\9c3566925f404b658a5672df9261f07a.json",
+  "transcript_md_path": "C:\\Users\\AlexA\\Documents\\Codex\\2026-06-04\\create-a-python-project-named-sarah\\shared_fdr_churchill_bus\\transcripts\\9c3566925f404b658a5672df9261f07a.md"
+}
