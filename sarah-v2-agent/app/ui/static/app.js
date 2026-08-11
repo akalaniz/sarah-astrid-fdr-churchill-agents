@@ -290,6 +290,11 @@ function createPdfPrintRoot(mode) {
       @page {
         margin: 0.35in;
       }
+      html,
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
       body > * { display: none !important; }
       #pdfPrintRoot {
         display: block !important;

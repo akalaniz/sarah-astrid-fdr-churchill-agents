@@ -43,6 +43,7 @@ from app.core.agent_bus import (
     send_agent_message,
 )
 from app.core.config import Settings, load_settings
+from app.core.conservative_theorizing import crew_theorizing_control
 from app.core.inbox_get import (
     debug_inbox_get,
     format_debug_inbox_get,
@@ -366,7 +367,13 @@ def create_app(settings: Settings | None = None, state: AppState | None = None) 
                 prompt = request.message
                 session_id = f"alex_injection:{request.conversation_id}:{LOCAL_AGENT_NAME}"
             elif request.mode == "crew_turn":
-                prompt = (request.original_human_prompt or request.message).strip()
+                original_prompt = (request.original_human_prompt or request.message).strip()
+                theorizing_control = crew_theorizing_control(
+                    original_prompt,
+                    request.from_agent,
+                    request.prior_agent_continuation or "",
+                )
+                prompt = "\n\n".join(part for part in (original_prompt, theorizing_control) if part)
                 session_id = f"crew_turn:{request.conversation_id}:{LOCAL_AGENT_NAME}:r{request.round_number or 0}"
             else:
                 prompt = build_inter_agent_input(request.from_agent, request.message, request.conversation_id)

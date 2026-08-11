@@ -17,6 +17,7 @@ MAX_LAYER_TOKENS = {
     "identity": 3_500,
     "constitution": 2_000,
     "safety": 1_200,
+    "conservative_theorizing": 2_400,
     "style": 900,
     "memory": 1_200,
     "agent_bus": 1_200,
@@ -51,6 +52,7 @@ def build_prompt(
     canon_file: Path | None = None,
     cas_context: str | None = None,
     agent_bus_context: str = "",
+    conservative_theorizing_policy: str = "",
 ) -> PromptAssembly:
     canon_context = build_canon_source_context(user_message, retrieved_context, canon_file)
     layers = [
@@ -62,10 +64,22 @@ def build_prompt(
         PromptLayer("canon", "system", canon_context, "Retrieved canon/source context"),
         PromptLayer("web", "system", web_context, "Retrieved web/current context"),
     ]
-    if agent_bus_context:
-        layers.insert(5, PromptLayer("agent_bus", "system", agent_bus_context, "Inter-agent message context"))
+    if conservative_theorizing_policy:
+        layers.insert(
+            3,
+            PromptLayer(
+                "conservative_theorizing",
+                "system",
+                conservative_theorizing_policy,
+                "Conditional conservative fundamental-physics policy",
+            ),
+        )
+    memory_index = next(index for index, layer in enumerate(layers) if layer.name == "memory")
     if cas_context:
-        layers.insert(4, PromptLayer("cas", "system", cas_context, "CAS geopolitical frame"))
+        layers.insert(memory_index, PromptLayer("cas", "system", cas_context, "CAS geopolitical frame"))
+        memory_index += 1
+    if agent_bus_context:
+        layers.insert(memory_index, PromptLayer("agent_bus", "system", agent_bus_context, "Inter-agent message context"))
 
     budget = _model_context_limit(model) - RESERVED_OUTPUT_TOKENS
     compressed_layers, layer_notes = _compress_layers(layers)

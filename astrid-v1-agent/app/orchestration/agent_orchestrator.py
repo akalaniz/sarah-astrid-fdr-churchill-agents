@@ -11,6 +11,7 @@ from urllib import error, request
 from uuid import uuid4
 
 from app.core.agent_bus import BUS_FILE, KNOWN_AGENTS, LOCAL_AGENT_NAME, mark_message_read, send_agent_message
+from app.core.conservative_theorizing import classify_theorizing_request, crew_theorizing_control
 from app.core.config import PROJECT_ROOT
 
 
@@ -244,6 +245,9 @@ def run_multi_agent_dialogue(
     safe_rounds = max(1, min(int(rounds), HARD_MAX_ROUNDS))
     turn_limit = style.total_turns or (safe_rounds * len(turn_order))
     turn_limit = max(1, min(turn_limit, HARD_MAX_ROUNDS * len(turn_order)))
+    theorizing_decision = classify_theorizing_request(clean_topic)
+    if theorizing_decision.active:
+        turn_limit = min(turn_limit, 2 if len(turn_order) > 1 else 1)
     max_chars = max(500, int(max_chars_per_turn))
     conversation_id = uuid4().hex
     scene_context = classify_crew_scene(clean_topic)
@@ -402,6 +406,7 @@ def run_multi_agent_dialogue(
         "rounds_run": safe_rounds,
         "max_chars_per_turn": max_chars,
         "total_turns": len(turns),
+        "conservative_theorizing": theorizing_decision.as_dict(),
         "crew_style": _style_to_dict(style),
         "turns": [_turn_to_dict(turn) for turn in turns],
         "turn_debug": turn_debug,
@@ -673,9 +678,10 @@ def build_crew_turn_prompt(
 ) -> str:
     clean_previous = _sanitize_forwarded_for_scene(previous_message, scene_context)
     tone_prompt = build_multi_agent_tone_directives(clean_previous)
+    theorizing_control = crew_theorizing_control(topic, from_agent, clean_previous)
     if style.display_mode != "conversation_only" and not style.max_words_per_turn:
         scene_prompt = _scene_context_prompt(scene_context)
-        return "\n\n".join(part for part in (scene_prompt, tone_prompt, clean_previous) if part)
+        return "\n\n".join(part for part in (scene_prompt, theorizing_control, tone_prompt, clean_previous) if part)
     max_words = style.max_words_per_turn or 60
     lines = [
         "CREW STYLE CONTROL",
@@ -698,6 +704,8 @@ def build_crew_turn_prompt(
         lines.extend(["", scene_prompt])
     if tone_prompt:
         lines.extend(["", tone_prompt])
+    if theorizing_control:
+        lines.extend(["", theorizing_control])
     lines.extend(["", f"Topic: {topic}", f"Previous speaker: {from_agent}", "", "Previous message:", clean_previous.strip()])
     return "\n".join(line for line in lines if line)
 

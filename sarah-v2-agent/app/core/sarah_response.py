@@ -11,6 +11,12 @@ from app.core.cas_geopolitics import (
     is_geopolitical_or_strategic,
 )
 from app.core.config import Settings
+from app.core.conservative_theorizing import (
+    build_conservative_theorizing_prompt,
+    classify_theorizing_with_history,
+    enforce_theorizing_output,
+    hard_stop_response,
+)
 from app.core.conversation import ConversationTurn
 from app.core.memory import MemoryStore, build_memory_context
 from app.core.openai_chat import SarahOpenAIClient
@@ -102,6 +108,28 @@ def generate_sarah_response(
             safety_debug=safety_decision.as_dict(),
         )
 
+    theorizing_decision = classify_theorizing_with_history(user_input, history)
+    if theorizing_decision.hard_stop:
+        return SarahResponse(
+            answer=hard_stop_response(LOCAL_AGENT_NAME),
+            retrieval=None,
+            retrieval_error=None,
+            web_result=WebRetrievalResult(
+                used_web=False,
+                failed=False,
+                reason="not needed",
+                sources=[],
+                timestamp="",
+            ),
+            messages=[],
+            prompt_debug_summary={
+                "layers": [],
+                "model": settings.sarah_model,
+                "conservative_theorizing": theorizing_decision.as_dict(),
+            },
+            safety_debug=safety_decision.as_dict(),
+        )
+
     retrieval_input = (retrieval_query or user_input).strip()
     retrieval, retrieval_error = _retrieve_for_message(retrieval_input)
     context_packet = build_context_packet(retrieval, retrieval_error)
@@ -132,6 +160,7 @@ def generate_sarah_response(
         packet for packet in (cas_context_packet, perrow_context_packet) if packet
     ) or None
     style_context_packet = build_style_directives(detected_mode)
+    theorizing_policy_packet = build_conservative_theorizing_prompt(theorizing_decision, LOCAL_AGENT_NAME)
     assembly = build_prompt(
         user_message=user_input,
         style_directives=style_context_packet,
@@ -140,10 +169,13 @@ def generate_sarah_response(
         web_context=web_context_packet,
         cas_context=system_analysis_context,
         agent_bus_context=agent_bus_context_packet,
+        conservative_theorizing_policy=theorizing_policy_packet,
         history=history,
         model=settings.sarah_model,
     )
     answer = client.create_response(settings.sarah_model, assembly.messages)
+    answer = enforce_theorizing_output(answer, theorizing_decision, LOCAL_AGENT_NAME)
+    assembly.debug_summary["conservative_theorizing"] = theorizing_decision.as_dict()
     safety_decision = mark_model_refusal(safety_decision, answer)
     return SarahResponse(
         answer=answer,
