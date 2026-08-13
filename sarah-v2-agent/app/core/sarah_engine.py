@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import threading
-from typing import Any
+from typing import Any, Callable
 
 from app.core.config import Settings, load_settings
 from app.core.conversation import ConversationMemory
 from app.core.memory import MemoryRecord, MemoryStore, build_memory_context, format_memories
 from app.core.openai_chat import SarahOpenAIClient
 from app.core.sarah_response import SarahResponse, generate_sarah_response, response_metadata
+from app.persona.sarah_v2_system_prompt import build_sarah_system_prompt
 from app.rag.retriever import RetrievalResult
 
 
@@ -108,6 +109,30 @@ def generate_sarah_reply(
         session.conversation.add_turn(message, reply.answer)
         session.last_reply = reply
         return reply
+
+
+def build_sarah_game_action_generator() -> Callable[[str], str]:
+    """Prepare Sarah's real engine for compact, non-persistent game actions."""
+    with _lock:
+        settings = _get_settings()
+        client = _get_client(settings)
+        identity = build_sarah_system_prompt()
+
+    def generate(user_message: str) -> str:
+        message = user_message.strip()
+        if not message:
+            raise ValueError("Game action prompt cannot be empty.")
+        return client.create_response(
+            settings.sarah_model,
+            [
+                {"role": "system", "content": identity},
+                {"role": "user", "content": message},
+            ],
+            reasoning_effort="none",
+            max_output_tokens=80,
+        )
+
+    return generate
 
 
 def reset_sarah_session(session_id: str = "default") -> None:

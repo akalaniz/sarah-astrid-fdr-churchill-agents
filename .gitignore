@@ -181,3 +181,6 @@ cython_debug/
 .cursorindexingignore
 !sarah-v2-agent/.env
 !astrid-v1-agent/.env
+
+# Local Space Invaders process state and session telemetry
+games/space_invaders/runtime/

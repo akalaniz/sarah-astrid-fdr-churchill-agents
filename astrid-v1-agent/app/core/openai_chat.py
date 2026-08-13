@@ -16,12 +16,23 @@ class SarahOpenAIClient:
 
         self._client = OpenAI(api_key=api_key)
 
-    def create_response(self, model: str, messages: list[dict[str, str]]) -> str:
+    def create_response(
+        self,
+        model: str,
+        messages: list[dict[str, str]],
+        reasoning_effort: str | None = None,
+        max_output_tokens: int | None = None,
+    ) -> str:
         if hasattr(self._client, "responses"):
-            response = self._client.responses.create(
-                model=model,
-                input=_responses_input(messages),
-            )
+            request: dict[str, Any] = {
+                "model": model,
+                "input": _responses_input(messages),
+            }
+            if reasoning_effort:
+                request["reasoning"] = {"effort": reasoning_effort}
+            if max_output_tokens is not None:
+                request["max_output_tokens"] = max_output_tokens
+            response = self._client.responses.create(**request)
             text = getattr(response, "output_text", "")
             if text:
                 return normalize_sarah_output(text)

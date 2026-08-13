@@ -1,4 +1,8 @@
+import json
 import logging
+from pathlib import Path
+import subprocess
+import sys
 
 from app.core.agent_bus import (
     LOCAL_AGENT_NAME,
@@ -51,7 +55,7 @@ def run_chat_loop(settings: Settings) -> None:
     last_safety_debug = None
 
     print("Sarah v2.0 chat. Type normally, or press Enter on an empty line to speak.")
-    print("Commands: /sources, /self_survey help|<topic>, /transcripts, /transcripts_keep [N], /transcripts_archive [DAYS], /transcripts_prune [--days D --keep N], /web_cache, /web_cache_validate, /web_cache_keep [N], /web_cache_archive [DAYS], /web_cache_prune [--days D --keep N], /web_cache_clear, /web_cache_archive_all, /web_cache_delete_corrupt, /debug_prompt, /debug_safety, /debug_sarah_boundaries, /debug_memory_live, /debug_agent_bus, /debug_inbox_receive, /debug_inbox_get <id>, /debug_orchestrator, /crew <topic>, /send Astrid: <text>, /inbox, /inbox all, /inbox_get <id>, /archive_inbox, /clear_inbox_confirm, /read <id>, /reply <id>: <text>, /thread <id>, /reset, /remember <text>, /forget <keyword>, /memory [keyword], /recall <keyword>, /recall_all, /clear_recall, /use_memory on|off, /quit.")
+    print("Commands: /sources, /self_survey help|<topic>, /transcripts, /transcripts_keep [N], /transcripts_archive [DAYS], /transcripts_prune [--days D --keep N], /web_cache, /web_cache_validate, /web_cache_keep [N], /web_cache_archive [DAYS], /web_cache_prune [--days D --keep N], /web_cache_clear, /web_cache_archive_all, /web_cache_delete_corrupt, /debug_prompt, /debug_safety, /debug_sarah_boundaries, /debug_memory_live, /debug_agent_bus, /debug_inbox_receive, /debug_inbox_get <id>, /debug_orchestrator, /crew <topic>, /send Astrid: <text>, /inbox, /inbox all, /inbox_get <id>, /archive_inbox, /clear_inbox_confirm, /read <id>, /reply <id>: <text>, /thread <id>, /space_invaders human|sarah|astrid|stop, /reset, /remember <text>, /forget <keyword>, /memory [keyword], /recall <keyword>, /recall_all, /clear_recall, /use_memory on|off, /quit.")
     print(f"Transcript: {transcript.path}")
 
     while True:
@@ -63,6 +67,10 @@ def run_chat_loop(settings: Settings) -> None:
             break
 
         command = user_input.lower()
+        space_invaders = _handle_space_invaders_command(command)
+        if space_invaders is not None:
+            print(f"Sarah: {space_invaders}")
+            continue
         if command in {"/quit", "quit", "exit"}:
             logger.info("Chat loop exited by command")
             transcript.write_event("quit")
@@ -319,6 +327,30 @@ def run_chat_loop(settings: Settings) -> None:
             web_status=reply.web_status,
             has_sufficient_evidence=reply.has_sufficient_evidence,
         )
+
+
+def _handle_space_invaders_command(message: str) -> str | None:
+    parts = message.strip().lower().split()
+    if not parts or parts[0] != "/space_invaders":
+        return None
+    if len(parts) != 2 or parts[1] not in {"human", "sarah", "astrid", "stop"}:
+        return "Use /space_invaders human|sarah|astrid|stop"
+    bridge = Path(__file__).resolve().parents[3] / "games" / "space_invaders" / "bridge.py"
+    action = ["stop"] if parts[1] == "stop" else ["start", parts[1]]
+    result = subprocess.run(
+        [sys.executable, "-u", str(bridge), *action],
+        cwd=str(bridge.parents[2]),
+        capture_output=True,
+        text=True,
+        timeout=12,
+        check=False,
+        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+    )
+    try:
+        payload = json.loads(result.stdout.strip().splitlines()[-1])
+    except (IndexError, ValueError):
+        return result.stderr.strip() or "Space Invaders command failed."
+    return str(payload.get("message", "Space Invaders command completed."))
 
 
 def _parse_send_command(user_input: str) -> tuple[str, str]:

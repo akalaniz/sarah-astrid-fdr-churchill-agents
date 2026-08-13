@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 import re
 import shutil
+import subprocess
+import sys
 import threading
 from typing import Any
 from urllib.parse import unquote
@@ -688,8 +690,49 @@ def _ingest_pdf_bytes(payload: bytes, raw_filename: str, settings: Settings) -> 
 
 
 
+def _handle_space_invaders_command(message: str) -> dict[str, Any] | None:
+    parts = message.strip().lower().split()
+    if not parts or parts[0] != "/space_invaders":
+        return None
+    if len(parts) != 2 or parts[1] not in {"human", "sarah", "astrid", "stop"}:
+        return {
+            "ok": False,
+            "text": "Use /space_invaders human|sarah|astrid|stop",
+            "sources": [],
+            "command": "space_invaders",
+        }
+    bridge = Path(__file__).resolve().parents[3] / "games" / "space_invaders" / "bridge.py"
+    action = ["stop"] if parts[1] == "stop" else ["start", parts[1]]
+    result = subprocess.run(
+        [sys.executable, "-u", str(bridge), *action],
+        cwd=str(bridge.parents[2]),
+        capture_output=True,
+        text=True,
+        timeout=12,
+        check=False,
+        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+    )
+    try:
+        payload = json.loads(result.stdout.strip().splitlines()[-1])
+    except (IndexError, ValueError):
+        payload = {
+            "ok": False,
+            "message": result.stderr.strip() or "Space Invaders command failed.",
+        }
+    return {
+        "ok": bool(payload.get("ok")) and result.returncode == 0,
+        "text": str(payload.get("message", "Space Invaders command completed.")),
+        "sources": [],
+        "command": "space_invaders",
+        "result": payload,
+    }
+
+
 def _handle_web_command(message: str, sarah_state: AppState) -> dict[str, Any] | None:
     command = message.lower()
+    space_invaders = _handle_space_invaders_command(command)
+    if space_invaders is not None:
+        return space_invaders
     if is_self_survey_command(message):
         topic = parse_self_survey_topic(message)
         if topic.lower() == "help":
