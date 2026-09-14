@@ -11,7 +11,7 @@ import shutil
 import subprocess
 import sys
 import threading
-from typing import Any
+from typing import Any, Literal
 from urllib.parse import unquote
 from uuid import uuid4
 
@@ -78,6 +78,7 @@ from app.rag.document_loader import load_document, load_documents
 from app.rag.embeddings import embed_texts, get_embedding_model_name
 from app.rag.vector_store import read_vector_store, write_vector_store
 from app.tools.web_router import retrieve_web_context, sources_for_display
+from app.ui.chat_stream import stream_chat
 
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -89,6 +90,8 @@ MAX_TEMPORARY_PDF_TEXT_CHARS = 120_000
 
 class ChatRequest(BaseModel):
     message: str
+    response_mode: Literal["quick", "deep"] | None = None
+    audience_mode: Literal["formal", "informal"] | None = None
     temporary_pdf_name: str | None = None
     temporary_pdf_text: str | None = None
 
@@ -196,6 +199,9 @@ def create_app(settings: Settings | None = None, state: AppState | None = None) 
         if command_response is not None:
             return command_response
 
+        mode_kwargs = {"response_mode": request.response_mode} if request.response_mode is not None else {}
+        if request.audience_mode is not None:
+            mode_kwargs["audience_mode"] = request.audience_mode
         try:
             if request.temporary_pdf_text and request.temporary_pdf_text.strip():
                 prompt = _build_temporary_pdf_chat_message(
@@ -207,15 +213,59 @@ def create_app(settings: Settings | None = None, state: AppState | None = None) 
                     prompt,
                     session_id=sarah_state.session_id,
                     retrieval_query=message,
+                    **mode_kwargs,
                 )
             else:
-                reply = sarah_engine.generate_sarah_reply(message, session_id=sarah_state.session_id)
+                reply = sarah_engine.generate_sarah_reply(message, session_id=sarah_state.session_id, **mode_kwargs)
         except ValueError as exc:
             raise HTTPException(status_code=500, detail=str(exc)) from exc
-        return {
+        payload = {
             "text": reply.text,
             "sources": reply.sources,
+            **({"response_mode": reply.prompt_debug_summary.get("response_mode")}
+               if request.response_mode is not None else {}),
         }
+        if request.audience_mode is not None:
+            payload["audience_mode"] = request.audience_mode
+            return JSONResponse(payload, headers={"X-Audience-Mode": request.audience_mode})
+        return payload
+
+    @app.post("/api/chat/stream")
+    def chat_stream(request: ChatRequest):
+        message = request.message.strip()
+        if not message:
+            raise HTTPException(status_code=400, detail="Message cannot be empty.")
+        if message.startswith("/"):
+            return chat(request)
+
+        sarah_state: AppState = app.state.sarah
+        prompt = message
+        kwargs: dict[str, Any] = {"session_id": sarah_state.session_id}
+        if request.response_mode is not None:
+            kwargs["response_mode"] = request.response_mode
+        if request.audience_mode is not None:
+            kwargs["audience_mode"] = request.audience_mode
+        if request.temporary_pdf_text and request.temporary_pdf_text.strip():
+            prompt = _build_temporary_pdf_chat_message(
+                request.temporary_pdf_name or "attachment.pdf",
+                request.temporary_pdf_text,
+                message,
+            )
+            kwargs["retrieval_query"] = message
+
+        def generate(on_delta):
+            reply = sarah_engine.generate_sarah_reply(prompt, on_delta=on_delta, **kwargs)
+            return {
+                "text": reply.text, "sources": reply.sources,
+                **({"response_mode": reply.prompt_debug_summary.get("response_mode")}
+                   if request.response_mode is not None else {}),
+                **({"audience_mode": request.audience_mode} if request.audience_mode is not None else {}),
+            }
+
+        response = stream_chat(generate)
+        if request.audience_mode is not None:
+            response.headers["X-Audience-Mode"] = request.audience_mode
+        return response
 
     @app.post("/api/reset")
     def reset() -> dict[str, Any]:

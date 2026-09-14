@@ -29,14 +29,22 @@ const memoryPanel = document.getElementById("memoryPanel");
 const agentInboxPanel = document.getElementById("agentInboxPanel");
 const statusLine = document.getElementById("statusLine");
 const transcriptLine = document.getElementById("transcriptLine");
+const responseModePicker = document.getElementById("responseModePicker");
+const responseModeStatus = document.getElementById("responseModeStatus");
+const RESPONSE_MODE_STORAGE_KEY = "astridResponseMode_v1";
+const audienceModePicker = document.getElementById("audienceModePicker");
+const AUDIENCE_MODE_STORAGE_KEY = "astridAudienceMode_v1";
 
 let recognition = null;
 let isListening = false;
 let speechEnabled = true;
+let speechQueue = null;
 let selectedVoice = null;
 let originalPdfPrintTitle = null;
 let pdfPrintCleanupTimer = null;
 let temporaryPdfAttachment = null;
+let chatBusy = false;
+let mathRenderQueue = Promise.resolve();
 const VOICE_STORAGE_KEY = "astridSelectedVoiceURI_v1_ava";
 const PREFERRED_ASTRID_VOICES = [
   /microsoft ava/i,
@@ -61,6 +69,38 @@ function configureMarkdownRenderer() {
     gfm: true,
     headerIds: false,
     mangle: false,
+  });
+}
+
+function setupResponseModes() {
+  try {
+    const saved = localStorage.getItem(RESPONSE_MODE_STORAGE_KEY);
+    if (saved === "quick" || saved === "deep") {
+      responseModePicker.querySelector(`input[value="${saved}"]`).checked = true;
+    }
+  } catch {}
+  responseModePicker.addEventListener("change", () => {
+    try {
+      localStorage.setItem(RESPONSE_MODE_STORAGE_KEY, responseModePicker.querySelector("input:checked").value);
+    } catch {}
+    responseModeStatus.textContent = "";
+    responseModeStatus.title = "";
+  });
+}
+
+function setupAudienceModes() {
+  try {
+    const saved = localStorage.getItem(AUDIENCE_MODE_STORAGE_KEY);
+    if (saved === "formal" || saved === "informal") {
+      audienceModePicker.querySelector(`input[value="${saved}"]`).checked = true;
+    }
+  } catch {}
+  audienceModePicker.addEventListener("change", () => {
+    // Do not continue speaking an earlier reply after its audience has changed.
+    stopSpeaking();
+    try {
+      localStorage.setItem(AUDIENCE_MODE_STORAGE_KEY, audienceModePicker.querySelector("input:checked").value);
+    } catch {}
   });
 }
 
@@ -540,11 +580,19 @@ async function attachTemporaryPdf(file) {
 function renderMessageBody(body, role, text) {
   if (role === "user") {
     body.textContent = text;
-    return;
+    return Promise.resolve();
   }
-  body.innerHTML = renderAssistantMarkdown(text);
-  normalizeMathDelimiters(body);
-  typesetMath(body);
+  const render = mathRenderQueue.catch(() => {}).then(async () => {
+    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
+      await window.MathJax.startup.promise.catch((error) => console.warn("MathJax startup failed.", error));
+    }
+    if (window.MathJax && window.MathJax.typesetClear) window.MathJax.typesetClear([body]);
+    body.innerHTML = renderAssistantMarkdown(text);
+    normalizeMathDelimiters(body);
+    await typesetMath(body);
+  });
+  mathRenderQueue = render;
+  return render;
 }
 
 function addMessage(role, text) {
@@ -566,38 +614,90 @@ function addMessage(role, text) {
 }
 
 function setBusy(isBusy) {
+  chatBusy = isBusy;
+  responseModePicker.disabled = isBusy;
+  audienceModePicker.disabled = isBusy;
   sendButton.disabled = isBusy;
   inputEl.disabled = isBusy;
+  resetButton.disabled = isBusy;
+  exportConversationPdfButton.disabled = isBusy;
+  exportLastResponsePdfButton.disabled = isBusy;
   sendButton.textContent = isBusy ? "Sending" : "Send";
 }
 
 async function sendMessage(message, options = {}) {
   const text = message.trim();
-  if (!text) return;
+  if (!text || chatBusy) return;
+  const replySpeech = beginReplySpeech();
+  const requestedMode = responseModePicker.querySelector("input:checked").value;
+  const requestedAudience = audienceModePicker.querySelector("input:checked").value;
+  responseModeStatus.textContent = text.startsWith("/") ? "" : `${requestedMode === "deep" ? "Deep" : "Quick"} requested`;
+  responseModeStatus.title = "";
   addMessage("user", text);
   if (options.fromVoice) {
     transcriptLine.textContent = `You said: ${text}`;
   }
   inputEl.value = "";
   setBusy(true);
+  let answerItem = null;
+  let renderer = null;
+  function answerRenderer() {
+    if (!renderer) {
+      answerItem = addMessage("astrid", "");
+      const body = answerItem.querySelector(".message-body");
+      renderer = window.ChatStreaming.createRenderer(async (value) => {
+        const followBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 100;
+        await renderMessageBody(body, "astrid", value);
+        if (followBottom) messagesEl.scrollTop = messagesEl.scrollHeight;
+      });
+    }
+    return renderer;
+  }
   try {
-    const response = await fetch("/api/chat", {
+    const request = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: text,
+        response_mode: requestedMode,
+        audience_mode: requestedAudience,
         temporary_pdf_name: temporaryPdfAttachment ? temporaryPdfAttachment.filename : undefined,
         temporary_pdf_text: temporaryPdfAttachment ? temporaryPdfAttachment.text : undefined,
       }),
+    };
+    let response = await fetch("/api/chat/stream", request);
+    if (response.status === 404 || response.status === 405) {
+      // An older running backend remains usable until the normal server restart.
+      await response.body?.cancel();
+      response = await fetch("/api/chat", request);
+    }
+    if (response.ok && requestedAudience === "formal" && !text.startsWith("/") &&
+        response.headers.get("X-Audience-Mode") !== "formal") {
+      await response.body?.cancel();
+      throw new Error("Formal is unavailable on the running server. Restart this agent and refresh the page.");
+    }
+    const payload = await window.ChatStreaming.readResponse(response, (value) => {
+      answerRenderer().update(value);
+      replySpeech?.update(value);
     });
-    const payload = await response.json();
-    if (!response.ok) throw new Error(payload.detail || "Chat request failed.");
     const answerText = payload.text || payload.answer || "";
-    addMessage("astrid", answerText);
+    if (!text.startsWith("/")) {
+      const mode = payload.response_mode;
+      if (mode && ["quick", "deep"].includes(mode.effective)) {
+        responseModeStatus.textContent = `${mode.effective === "deep" ? "Deep" : "Quick"}${mode.requested !== mode.effective ? " (automatic)" : ""}`;
+        responseModeStatus.title = mode.reason || "";
+      } else {
+        responseModeStatus.textContent = "response_mode" in payload ? "No model call" : "Mode unavailable";
+      }
+    }
+    // Guarded replies have no preview events; their speech starts only here, after validation.
+    replySpeech?.finish(answerText);
+    await answerRenderer().finish(answerText);
     renderSources(payload.sources || [], []);
-    speakAstrid(answerText);
   } catch (error) {
-    addMessage("astrid", `Request failed: ${error.message}`);
+    replySpeech?.cancel();
+    responseModeStatus.textContent = "Request interrupted";
+    await answerRenderer().finish(`Request failed: ${error.message}`);
   } finally {
     setBusy(false);
     inputEl.focus();
@@ -885,32 +985,31 @@ function normalizeLang(lang) {
   return String(lang || "").toLowerCase();
 }
 
-function speakAstrid(text) {
-  if (!speechEnabled || !("speechSynthesis" in window)) return;
-
+function beginReplySpeech() {
   stopSpeaking();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-US";
-  utterance.rate = 0.96;
-  utterance.pitch = 0.92;
-  utterance.volume = 1;
-  if (selectedVoice) {
-    utterance.voice = selectedVoice;
-  }
-  utterance.onstart = () => {
-    stopSpeechButton.disabled = false;
-  };
-  utterance.onend = () => {
-    stopSpeechButton.disabled = true;
-  };
-  utterance.onerror = () => {
-    stopSpeechButton.disabled = true;
-  };
-  window.speechSynthesis.speak(utterance);
+  if (!speechEnabled || !("speechSynthesis" in window) ||
+      !("SpeechSynthesisUtterance" in window)) return null;
+  speechQueue = window.SpeechStreaming.createQueue({
+    synthesis: window.speechSynthesis,
+    createUtterance(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 0.96;
+      utterance.pitch = 0.92;
+      utterance.volume = 1;
+      if (selectedVoice) utterance.voice = selectedVoice;
+      return utterance;
+    },
+    onState(active) { stopSpeechButton.disabled = !active; },
+  });
+  return speechQueue;
 }
 
 function stopSpeaking() {
-  if ("speechSynthesis" in window) {
+  if (speechQueue) {
+    speechQueue.cancel();
+    speechQueue = null;
+  } else if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
   }
   stopSpeechButton.disabled = true;
@@ -958,6 +1057,7 @@ micButton.addEventListener("click", () => {
 resetButton.addEventListener("click", resetConversation);
 speechToggleButton.addEventListener("click", toggleSpeech);
 stopSpeechButton.addEventListener("click", stopSpeaking);
+window.addEventListener("pagehide", stopSpeaking);
 refreshMemoryButton.addEventListener("click", loadMemory);
 refreshAgentInboxButton.addEventListener("click", loadAgentInbox);
 showAllAgentInboxButton.addEventListener("click", () => loadAgentInbox(true));
@@ -987,6 +1087,8 @@ fetch("/api/status")
 configureMarkdownRenderer();
 setupMicrophone();
 setupSpeechSynthesis();
+setupResponseModes();
+setupAudienceModes();
 loadMemory();
 loadAgentInbox();
 addMessage("astrid", "Ready.");

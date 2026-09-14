@@ -238,6 +238,80 @@ h2 {
   color: var(--accent-dark);
 }
 
+.response-controls {
+  display: flex;
+  margin-bottom: 0.5rem;
+  align-items: end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.response-mode-picker {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.response-mode-picker legend {
+  margin-bottom: 0.25rem;
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.response-mode-options {
+  display: inline-flex;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.response-mode-options input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.response-mode-options label {
+  display: grid;
+  place-items: center;
+  min-width: 4.5rem;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.6rem;
+  color: var(--accent-dark);
+  background: var(--panel);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.response-mode-options input:checked + label {
+  background: var(--accent);
+  color: white;
+}
+
+.response-mode-options input:focus-visible + label {
+  outline: 2px solid var(--ink);
+  outline-offset: -3px;
+}
+
+.response-mode-picker:disabled {
+  opacity: 0.6;
+}
+
+.response-mode-picker:disabled label {
+  cursor: not-allowed;
+}
+
+.response-mode-status {
+  color: var(--muted);
+  font-size: 0.82rem;
+  padding-bottom: 0.4rem;
+  overflow-wrap: anywhere;
+}
+
 .composer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

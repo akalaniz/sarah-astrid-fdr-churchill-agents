@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Astrid v1.0</title>
-    <link rel="stylesheet" href="/static/style.css?v=astrid-pdf-features-temporary-pdf-20260805a">
+    <link rel="stylesheet" href="/static/style.css?v=astrid-pdf-features-temporary-pdf-20260805a-response-modes-20260908">
   </head>
   <body>
     <main class="shell">
@@ -33,6 +33,27 @@
 
         <form id="chatForm" class="composer">
           <div class="input-stack">
+            <div class="response-controls">
+              <fieldset id="responseModePicker" class="response-mode-picker">
+                <legend>Response</legend>
+                <div class="response-mode-options">
+                  <input id="responseQuick" name="responseMode" type="radio" value="quick" checked>
+                  <label for="responseQuick" title="Concise conversation with lower reasoning effort">Quick</label>
+                  <input id="responseDeep" name="responseMode" type="radio" value="deep">
+                  <label for="responseDeep" title="High reasoning effort and full-depth answers">Deep</label>
+                </div>
+              </fieldset>
+              <fieldset id="audienceModePicker" class="response-mode-picker">
+                <legend>Audience</legend>
+                <div class="response-mode-options">
+                  <input id="audienceFormal" name="audienceMode" type="radio" value="formal">
+                  <label for="audienceFormal" title="Professional language; no profanity, flirting, pet names, or affection">Formal</label>
+                  <input id="audienceInformal" name="audienceMode" type="radio" value="informal" checked>
+                  <label for="audienceInformal" title="Existing conversational personality and tone">Informal</label>
+                </div>
+              </fieldset>
+              <output id="responseModeStatus" class="response-mode-status" aria-live="polite"></output>
+            </div>
             <textarea id="messageInput" rows="3" placeholder="Type to Astrid, or press Speak..." autocomplete="off"></textarea>
             <div class="temporary-pdf-controls">
               <button id="attachTemporaryPdfButton" class="small secondary" type="button">Attach PDF</button>
@@ -107,6 +128,8 @@
     <script defer src="/static/vendor/purify.min.js?v=astrid-equation-rendering-20260804i"></script>
     <script defer src="/static/vendor/marked.min.js?v=astrid-equation-rendering-20260804i"></script>
     <script defer src="/static/vendor/tex-chtml-full.js?v=astrid-equation-rendering-20260804l"></script>
-    <script defer src="/static/app.js?v=astrid-pdf-features-pdf-print-buttons-whitespace-temporary-pdf-20260805b"></script>
+    <script defer src="/static/chat-stream.js?v=streaming-20260908"></script>
+    <script defer src="/static/speech-stream.js?v=sentence-speech-20260908"></script>
+    <script defer src="/static/app.js?v=astrid-pdf-features-pdf-print-buttons-whitespace-temporary-pdf-20260805b-streaming-20260908-sentence-speech-20260908-response-modes-20260908-audience-20260909"></script>
   </body>
 </html>

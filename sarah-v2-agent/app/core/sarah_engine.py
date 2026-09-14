@@ -63,12 +63,17 @@ def generate_sarah_reply(
     user_message: str,
     session_id: str = "default",
     retrieval_query: str | None = None,
+    on_delta: Callable[[str], None] | None = None,
+    response_mode: str | None = None,
+    audience_mode: str | None = None,
 ) -> SarahReply:
     message = user_message.strip()
     if not message:
         raise ValueError("User message cannot be empty.")
 
     with _lock:
+        if on_delta is not None:
+            on_delta("")
         settings = _get_settings()
         client = _get_client(settings)
         session = _sessions.setdefault(session_id, _SarahSession(conversation=ConversationMemory()))
@@ -86,7 +91,12 @@ def generate_sarah_reply(
             memory_context_override=memory_context_override,
             auto_memory_enabled=session.use_memory,
             retrieval_query=retrieval_query,
+            **({"on_delta": on_delta} if on_delta is not None else {}),
+            **({"response_mode": response_mode} if response_mode is not None else {}),
+            **({"audience_mode": audience_mode} if audience_mode is not None else {}),
         )
+        if on_delta is not None:
+            on_delta("")  # Do not commit a disconnected or interrupted reply to history.
         session.injected_into_last_prompt = bool(memory_context_override or (session.use_memory and _prompt_had_memory(response)))
         session.last_injected_memory_count = injected_count if memory_context_override else _count_injected_memories(response)
         session.last_injected_memory_block = _extract_memory_block(response)

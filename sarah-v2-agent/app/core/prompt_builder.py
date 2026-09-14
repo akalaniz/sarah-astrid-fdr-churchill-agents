@@ -53,6 +53,7 @@ def build_prompt(
     cas_context: str | None = None,
     agent_bus_context: str = "",
     conservative_theorizing_policy: str = "",
+    audience_directives: str = "",
 ) -> PromptAssembly:
     canon_context = build_canon_source_context(user_message, retrieved_context, canon_file)
     layers = [
@@ -74,6 +75,8 @@ def build_prompt(
                 "Conditional conservative fundamental-physics policy",
             ),
         )
+    if audience_directives:
+        layers.append(PromptLayer("audience", "system", audience_directives, "Current reply audience"))
     memory_index = next(index for index, layer in enumerate(layers) if layer.name == "memory")
     if cas_context:
         layers.insert(memory_index, PromptLayer("cas", "system", cas_context, "CAS geopolitical frame"))

@@ -7,7 +7,7 @@ from typing import Any
 
 from app.core.config import load_settings
 from app.rag.embeddings import LOCAL_EMBEDDING_MODEL, cosine_similarity, embed_texts
-from app.rag.vector_store import read_vector_store
+from app.rag.vector_store import read_cached_vector_store as read_vector_store
 
 
 DEFAULT_MIN_SCORE = 0.15

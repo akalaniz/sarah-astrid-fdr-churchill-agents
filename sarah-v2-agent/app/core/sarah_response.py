@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import logging
-from typing import Any
+from typing import Any, Callable
 
 from app.core.agent_bus import LOCAL_AGENT_NAME, build_agent_message_context
 from app.core.cas_geopolitics import (
@@ -26,6 +26,8 @@ from app.core.perrow_cas import (
 )
 from app.core.rag_context import build_context_packet, sources_for_transcript
 from app.core.prompt_builder import build_prompt
+from app.core.response_mode import select_response_mode
+from app.core.audience_mode import audience_directives
 from app.core.safety import (
     build_app_refusal,
     build_refusal_diagnostic_answer,
@@ -66,8 +68,12 @@ def generate_sarah_response(
     memory_context_override: str | None = None,
     auto_memory_enabled: bool = True,
     retrieval_query: str | None = None,
+    on_delta: Callable[[str], None] | None = None,
+    response_mode: str | None = None,
+    audience_mode: str | None = None,
 ) -> SarahResponse:
     history = history or []
+    audience_policy = audience_directives(audience_mode)
 
     initial_mode = infer_mode_from_state(
         user_message=user_input,
@@ -160,6 +166,14 @@ def generate_sarah_response(
         packet for packet in (cas_context_packet, perrow_context_packet) if packet
     ) or None
     style_context_packet = build_style_directives(detected_mode)
+    mode = select_response_mode(
+        response_mode, user_input, history,
+        protected_physics=theorizing_decision.active,
+        has_attachment=retrieval_query is not None,
+    ) if response_mode is not None else None
+    if mode is not None:
+        style_context_packet += "\n\n" + mode.prompt()
+    model_options = mode.api_options(settings.sarah_model) if mode is not None else {}
     theorizing_policy_packet = build_conservative_theorizing_prompt(theorizing_decision, LOCAL_AGENT_NAME)
     assembly = build_prompt(
         user_message=user_input,
@@ -170,12 +184,19 @@ def generate_sarah_response(
         cas_context=system_analysis_context,
         agent_bus_context=agent_bus_context_packet,
         conservative_theorizing_policy=theorizing_policy_packet,
+        **({"audience_directives": audience_policy} if audience_policy else {}),
         history=history,
         model=settings.sarah_model,
     )
-    answer = client.create_response(settings.sarah_model, assembly.messages)
+    # A speculative construction must pass the whole-answer policy before it is shown.
+    if on_delta is not None and not theorizing_decision.active:
+        answer = client.stream_response(settings.sarah_model, assembly.messages, on_delta, **model_options)
+    else:
+        answer = client.create_response(settings.sarah_model, assembly.messages, **model_options)
     answer = enforce_theorizing_output(answer, theorizing_decision, LOCAL_AGENT_NAME)
     assembly.debug_summary["conservative_theorizing"] = theorizing_decision.as_dict()
+    if mode is not None:
+        assembly.debug_summary["response_mode"] = mode.as_dict(settings.sarah_model)
     safety_decision = mark_model_refusal(safety_decision, answer)
     return SarahResponse(
         answer=answer,
